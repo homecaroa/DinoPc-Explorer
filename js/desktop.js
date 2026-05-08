@@ -18,6 +18,8 @@ const Desktop = {
     'dinoword':      { title: '📝 DinoWord',                      w: 520, h: 430, init: () => DinoWord.init()     },
     'minigame':      { title: '🎮 Rescate del Río',               w: 746, h: 432, init: () => Minigame.start()    },
     'quiz':          { title: '🧠 DinoQuiz',                      w: 500, h: 430, init: () => Quiz.init()         },
+    'settings':      { title: '⚙️ Configuración del Laboratorio', w: 430, h: 330, init: () => Settings.init()     },
+    'dinoLog':       { title: '📊 Diario DinoPC',                 w: 450, h: 410, init: null                      },
     'trash':         { title: '🗑️ Papelera de Reciclaje',         w: 340, h: 220, init: null                      }
   },
 
@@ -28,6 +30,8 @@ const Desktop = {
       case 'dinoword':      return DinoWord.buildHTML();
       case 'minigame':      return `<div class="game-container"><canvas id="game-canvas" width="724" height="396"></canvas></div>`;
       case 'quiz':          return Quiz.buildHTML();
+      case 'settings':      return Settings.buildHTML();
+      case 'dinoLog':       return DinoLog.buildHTML();
       case 'trash':         return `<div class="trash-empty"><span>🗑️</span><p>La papelera está vacía</p></div>`;
       default:              return '<p style="padding:20px;color:var(--txt-dim)">Sin contenido</p>';
     }
@@ -354,10 +358,9 @@ const FileExplorer = {
 
   /** Crea la carpeta de la misión */
   newFolder() {
-    const name = 'Expedición Spinosaurio';
+    const name = Mission.current.folderName;
     const fs   = App.state.fileSystem;
 
-    // Evitar duplicados
     if (fs.children[name]) {
       Desktop.showGuide('La carpeta "' + name + '" ya existe. ¡Ahora abre DinoWord! 📝');
       return;
@@ -367,9 +370,7 @@ const FileExplorer = {
     this.render();
 
     Mission.onAction('create-folder', { name });
-    Desktop.showGuide(
-      '✅ ¡Carpeta "' + name + '" creada! Ahora abre DinoWord y escribe tu informe sobre el Spinosaurio.'
-    );
+    Desktop.showGuide('✅ ¡Carpeta "' + name + '" creada! Ahora abre DinoWord y escribe el informe.');
   },
 
   /** Añade un archivo guardado desde DinoWord al sistema de archivos virtual */
@@ -411,19 +412,23 @@ const DinoWord = {
   _textTyped:   false,
 
   buildHTML() {
+    const m = (typeof Mission !== 'undefined' && Mission.current) ? Mission.current : {
+      targetText: 'El Spinosaurio encontró peces gigantes en el río.',
+      fileName:   'informe_spino.doc'
+    };
     return `
       <div class="dinoword">
         <div class="dw-toolbar">
           <div class="dw-fname-wrap">
             <label>📄 Nombre:</label>
             <input type="text" id="dw-filename" class="dw-filename"
-                   value="informe_spino.doc" placeholder="nombre_archivo.doc">
+                   value="${m.fileName}" placeholder="nombre_archivo.doc">
           </div>
           <button class="dw-save" onclick="DinoWord.save()">💾 Guardar</button>
         </div>
         <div class="dw-hint">
           <span>💡 Escribe exactamente:</span>
-          <em>"El Spinosaurio encontró peces gigantes en el río."</em>
+          <em id="dw-hint-text">"${m.targetText}"</em>
         </div>
         <textarea id="dw-content" class="dw-textarea"
           placeholder="Escribe tu informe de expedición aquí..."
@@ -434,9 +439,13 @@ const DinoWord = {
   },
 
   init() {
-    // Auto-foco al textarea
+    const m = (typeof Mission !== 'undefined' && Mission.current) ? Mission.current : {
+      targetText: 'El Spinosaurio encontró peces gigantes en el río.',
+      fileName:   'informe_spino.doc'
+    };
+    this.TARGET_TEXT = m.targetText;
+    this._textTyped  = false;
     setTimeout(() => document.getElementById('dw-content')?.focus(), 100);
-    this._textTyped = false;
   },
 
   onChange(value) {
@@ -478,6 +487,7 @@ const DinoWord = {
 
     // Añadir al sistema de archivos virtual
     FileExplorer.addFile(filename, content);
+    DinoLog.track('file');
 
     if (status) {
       status.textContent = '💾 Guardado: ' + filename + ' ✅';
@@ -490,5 +500,77 @@ const DinoWord = {
       '💾 Archivo "' + filename + '" guardado. ' +
       'Ve al Explorador de Archivos y mueve el documento a la carpeta de la expedición.'
     );
+  }
+};
+
+// ═══════════════════════════════════════════════════
+//  SETTINGS — personalización del laboratorio
+// ═══════════════════════════════════════════════════
+const Settings = {
+
+  SCHEMES: {
+    neon:   { neon: '#00ff88', dim: '#00cc6a', label: 'Verde Neón',       dot: '#00ff88' },
+    amber:  { neon: '#ffb700', dim: '#cc9200', label: 'Ámbar Solar',      dot: '#ffb700' },
+    blue:   { neon: '#4499ff', dim: '#2277dd', label: 'Azul Eléctrico',   dot: '#4499ff' },
+    purple: { neon: '#cc66ff', dim: '#aa44dd', label: 'Púrpura Jurásico', dot: '#cc66ff' }
+  },
+
+  buildHTML() {
+    const s = (typeof App !== 'undefined') ? App.state.settings : { labName: 'DinoPC Lab', accent: 'neon' };
+    const swatches = Object.entries(this.SCHEMES).map(([key, scheme]) =>
+      `<button class="swatch-btn ${s.accent === key ? 'active' : ''}"
+               data-key="${key}" onclick="Settings.selectColor('${key}')" title="${scheme.label}">
+         <span class="swatch-dot" style="background:${scheme.dot}"></span>
+         <span class="swatch-name">${scheme.label}</span>
+       </button>`
+    ).join('');
+
+    return `
+      <div class="settings-wrap">
+        <div class="settings-sec">
+          <label class="setting-lbl">🏷️ Nombre del Laboratorio</label>
+          <input type="text" id="lab-name-input" class="setting-input"
+                 value="${s.labName}" maxlength="32" placeholder="Mi Lab Jurásico">
+        </div>
+        <div class="settings-sec">
+          <label class="setting-lbl">🎨 Color de Acento</label>
+          <div class="swatches-row">${swatches}</div>
+        </div>
+        <div class="settings-preview" id="settings-preview"></div>
+        <button class="btn-primary settings-apply" onclick="Settings.apply()">✅ Aplicar cambios</button>
+        <p class="settings-note">Los cambios se guardan automáticamente</p>
+      </div>`;
+  },
+
+  init() {
+    const s = (typeof App !== 'undefined') ? App.state.settings : { accent: 'neon' };
+    this._updatePreview(s.accent);
+  },
+
+  selectColor(key) {
+    document.querySelectorAll('.swatch-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector(`.swatch-btn[data-key="${key}"]`)?.classList.add('active');
+    this._updatePreview(key);
+  },
+
+  _updatePreview(key) {
+    const scheme = this.SCHEMES[key];
+    if (!scheme) return;
+    const prev = document.getElementById('settings-preview');
+    if (prev) {
+      prev.innerHTML =
+        `<span style="color:${scheme.neon}">●</span> Vista previa:
+         <b style="color:${scheme.neon}">${scheme.label}</b>
+         <button style="background:${scheme.neon};color:#000;padding:3px 10px;
+                        border-radius:4px;font-size:11px;margin-left:8px">Botón</button>`;
+      prev.style.borderColor = scheme.neon + '55';
+    }
+  },
+
+  apply() {
+    const name = document.getElementById('lab-name-input')?.value.trim() || 'DinoPC Lab';
+    const key  = document.querySelector('.swatch-btn.active')?.dataset.key || 'neon';
+    App.applySettings({ labName: name, accent: key });
+    Desktop.showGuide(`✅ ¡Configuración guardada! Laboratorio: "${name}"`);
   }
 };

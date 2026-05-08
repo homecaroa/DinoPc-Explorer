@@ -1,74 +1,115 @@
 /**
  * DinoPC Explorer — mission.js
- * Sistema de misión: detecta automáticamente los 5 pasos
- * y gestiona el progreso del jugador.
+ * Sistema de misiones múltiples: 3 expediciones secuenciales.
+ * La misión activa se determina por los dinos ya desbloqueados.
  */
 
 const Mission = {
 
-  /** Definición de los 5 pasos */
-  STEPS: [
-    { id: 'create-folder', label: 'Crear carpeta "Expedición Spinosaurio"' },
-    { id: 'open-dinoword', label: 'Abrir el editor DinoWord'               },
-    { id: 'type-text',     label: 'Escribir el texto del informe'           },
-    { id: 'save-file',     label: 'Guardar como "informe_spino.doc"'        },
-    { id: 'move-file',     label: 'Mover el archivo a la carpeta'           }
+  // ─── Definición de las 3 misiones ────────────────
+
+  MISSIONS: [
+    {
+      id:         'spinosaurus',
+      num:        1,
+      title:      'Expedición Spinosaurio',
+      dino:       'spinosaurus',
+      folderName: 'Expedición Spinosaurio',
+      targetText: 'El Spinosaurio encontró peces gigantes en el río.',
+      fileName:   'informe_spino.doc',
+      intro:      '¡Bienvenido al laboratorio! 🦕 Tu primera misión: documenta al Spinosaurio, el mayor carnívoro que existió. Empieza creando una carpeta en "Mis Expediciones".'
+    },
+    {
+      id:         'trex',
+      num:        2,
+      title:      'Expedición T-Rex',
+      dino:       'trex',
+      folderName: 'Expedición TRex',
+      targetText: 'El Tiranosaurio Rex fue el depredador más temido del Cretácico tardío.',
+      fileName:   'informe_trex.doc',
+      intro:      '¡Increíble trabajo! 🦖 Ahora estudiaremos al legendario T-Rex. Crea una nueva carpeta y redacta su informe científico en DinoWord.'
+    },
+    {
+      id:         'triceratops',
+      num:        3,
+      title:      'Expedición Triceratops',
+      dino:       'triceratops',
+      folderName: 'Expedición Triceratops',
+      targetText: 'El Triceratops usaba sus tres cuernos para defenderse de los depredadores.',
+      fileName:   'informe_triceratops.doc',
+      intro:      '¡Última expedición! 🦏 El Triceratops nos espera. Es el herbívoro con armadura más famoso del Cretácico. ¡Crea su expedición y documenta sus datos!'
+    }
   ],
 
-  completed:   [],   // IDs de pasos completados
-  panelHidden: false,
+  STEPS: [
+    { id: 'create-folder', label: 'Crear carpeta de expedición' },
+    { id: 'open-dinoword', label: 'Abrir DinoWord'              },
+    { id: 'type-text',     label: 'Escribir el informe'          },
+    { id: 'save-file',     label: 'Guardar el archivo'           },
+    { id: 'move-file',     label: 'Mover archivo a la carpeta'   }
+  ],
+
+  _completedSteps: [],
+  panelHidden:     false,
+
+  // ─── Getters de misión activa ─────────────────────
+
+  get currentIdx() {
+    const unlocked = App.state.unlockedDinos;
+    const idx = this.MISSIONS.findIndex(m => !unlocked.includes(m.dino));
+    return idx === -1 ? this.MISSIONS.length - 1 : idx;
+  },
+
+  get current() { return this.MISSIONS[this.currentIdx]; },
+
+  get allComplete() {
+    return this.MISSIONS.every(m => App.state.unlockedDinos.includes(m.dino));
+  },
 
   // ─── Inicialización ───────────────────────────────
 
   init() {
-    this.completed = [];
+    this._completedSteps = [];
     this._renderPanel();
+    setTimeout(() => Desktop.showGuide(
+      this.allComplete
+        ? '🏆 ¡Has completado las 3 expediciones! Eres un paleontólogo experto.'
+        : this.current.intro
+    ), 400);
   },
 
   // ─── Detector de acciones ─────────────────────────
 
-  /**
-   * Punto de entrada: cualquier módulo llama a este método
-   * cuando ocurre una acción relevante.
-   *
-   * @param {string} action - Tipo de acción ('open-window', 'create-folder', ...)
-   * @param {object} data   - Datos adicionales de la acción
-   */
-  onAction(action, data = {}) {
-    switch (action) {
+  onAction(action, data) {
+    data = data || {};
+    if (this.allComplete) return;
 
+    switch (action) {
       case 'create-folder':
-        // Paso 1: cualquier carpeta creada cuenta
         this._complete('create-folder');
         break;
 
       case 'open-window':
-        // Paso 2: abrir DinoWord
-        if (data.id === 'dinoword') {
-          this._complete('open-dinoword');
-        }
+        if (data.id === 'dinoword') this._complete('open-dinoword');
         break;
 
       case 'type-text':
-        // Paso 3: escribir el texto correcto
         this._complete('type-text');
         break;
 
-      case 'save-file':
-        // Paso 4: guardar con nombre correcto
-        if (data.filename && data.filename.toLowerCase().trim() === 'informe_spino.doc') {
+      case 'save-file': {
+        const expected = this.current.fileName;
+        if (data.filename && data.filename.toLowerCase().trim() === expected) {
           this._complete('save-file');
         } else {
-          // Guardar con nombre incorrecto → orientar al jugador
           Desktop.showGuide(
-            '⚠️ El archivo se guardó como "' + data.filename + '". ' +
-            'La misión requiere guardarlo como "informe_spino.doc". ¡Inténtalo de nuevo!'
+            '⚠️ El archivo debe llamarse exactamente "' + expected + '". Lo guardaste como "' + data.filename + '". ¡Inténtalo de nuevo!'
           );
         }
         break;
+      }
 
       case 'move-file':
-        // Paso 5: mover el archivo a una carpeta
         this._complete('move-file');
         break;
     }
@@ -76,79 +117,86 @@ const Mission = {
 
   // ─── Lógica interna ───────────────────────────────
 
-  /** Marca un paso como completado */
   _complete(stepId) {
-    if (this.completed.includes(stepId)) return; // ya completado
-
-    this.completed.push(stepId);
+    if (this._completedSteps.includes(stepId)) return;
+    this._completedSteps.push(stepId);
     this._renderPanel();
     this._animateStep(stepId);
+    DinoLog.track('step');
 
-    // ¿Misión completa?
-    if (this.completed.length === this.STEPS.length) {
-      setTimeout(() => this._onMissionComplete(), 800);
+    if (this._completedSteps.length === this.STEPS.length) {
+      setTimeout(function() { Mission._onMissionComplete(); }, 800);
     }
   },
 
-  /** Se llama cuando los 5 pasos están completos */
   _onMissionComplete() {
+    var m = this.current;
+    DinoLog.track('mission');
     Desktop.showGuide(
-      '🏆 ¡MISIÓN COMPLETADA! Has hecho un trabajo científico increíble. ' +
-      '¡Ahora demuestra tus conocimientos en el DinoQuiz para desbloquear la ficha del Spinosaurio!',
+      '🏆 ¡Expedición "' + m.title + '" completada! Ahora demuestra tus conocimientos en el DinoQuiz para desbloquear la ficha.',
       10000
     );
-
-    // Abrir quiz automáticamente
-    setTimeout(() => {
-      Desktop.openWindow('quiz');
-    }, 2500);
+    Quiz.forDino = m.dino;
+    setTimeout(function() { Desktop.openWindow('quiz'); }, 2600);
   },
 
-  // ─── Panel visual ─────────────────────────────────
+  // ─── Renderizado del panel ────────────────────────
 
   _renderPanel() {
-    const container = document.getElementById('mp-steps');
+    var container = document.getElementById('mp-steps');
+    var header    = document.querySelector('.mp-header span');
     if (!container) return;
 
-    const allDone = this.completed.length === this.STEPS.length;
+    var m   = this.current;
+    var all = this.allComplete;
 
-    container.innerHTML = this.STEPS.map((step, i) => {
-      const done   = this.completed.includes(step.id);
-      const active = !done && this.completed.length === i;
-      const cls    = done ? 'done' : (active ? 'active' : '');
-      const icon   = done ? '✓' : (active ? '→' : String(i + 1));
+    if (header) {
+      header.textContent = all
+        ? '🏆 ¡TODAS COMPLETADAS!'
+        : '🦕 MISIÓN ' + m.num + '/3 · ' + m.title.toUpperCase();
+    }
 
-      return `
-        <div class="mp-step ${cls}" id="mstep-${step.id}">
-          <div class="step-dot">${icon}</div>
-          <span>${step.label}</span>
-        </div>
-      `;
+    if (all) {
+      container.innerHTML =
+        '<div class="mp-all-done"><div>¡Eres un paleontólogo experto!</div><div class="mp-dinos">🦕 🦖 🦏</div></div>';
+      return;
+    }
+
+    var self = this;
+    container.innerHTML = this.STEPS.map(function(step, i) {
+      var done   = self._completedSteps.includes(step.id);
+      var active = !done && self._completedSteps.length === i;
+      var cls    = done ? 'done' : active ? 'active' : '';
+      var icon   = done ? '✓' : active ? '→' : String(i + 1);
+      return '<div class="mp-step ' + cls + '" id="mstep-' + step.id + '">' +
+             '<div class="step-dot">' + icon + '</div>' +
+             '<span>' + step.label + '</span></div>';
     }).join('');
 
-    // Si misión completa, poner cabecera dorada
-    const header = document.querySelector('.mp-header span');
-    if (header && allDone) {
-      header.textContent = '🏆 ¡MISIÓN COMPLETADA!';
-    }
+    // Barra de progreso de misiones
+    var dots = this.MISSIONS.map(function(mission, i) {
+      var isDone    = App.state.unlockedDinos.includes(mission.dino);
+      var isCurrent = i === self.currentIdx;
+      var cls       = isDone ? 'done' : isCurrent ? 'active' : '';
+      return '<span class="mp-mdot ' + cls + '" title="' + mission.title + '"></span>';
+    }).join('');
+
+    container.innerHTML +=
+      '<div class="mp-mbar">' + dots +
+      '<span class="mp-mlabel">misión ' + (this.currentIdx + 1) + ' de ' + this.MISSIONS.length + '</span></div>';
   },
 
-  /** Pequeña animación de destello en el paso recién completado */
   _animateStep(stepId) {
-    const el = document.getElementById('mstep-' + stepId);
+    var el = document.getElementById('mstep-' + stepId);
     if (!el) return;
     el.style.transition = 'none';
-    el.style.background = 'rgba(0,255,136,0.2)';
-    setTimeout(() => {
-      el.style.transition = 'background 1s ease';
-      el.style.background = '';
-    }, 50);
+    el.style.background = 'rgba(0,255,136,0.22)';
+    setTimeout(function() { el.style.transition = 'background 1.2s'; el.style.background = ''; }, 50);
   },
 
-  /** Colapsar/expandir el panel */
   togglePanel() {
-    const steps  = document.getElementById('mp-steps');
-    const btn    = document.querySelector('.mp-toggle');
+    var steps = document.getElementById('mp-steps');
+    var btn   = document.querySelector('.mp-toggle');
     this.panelHidden = !this.panelHidden;
     steps.style.display = this.panelHidden ? 'none' : '';
     if (btn) btn.classList.toggle('up', !this.panelHidden);

@@ -1,14 +1,14 @@
 /**
  * DinoPC Explorer — app.js
- * Estado global, transiciones de pantalla y sistema de recompensas.
+ * Estado global, transiciones de pantalla, settings y recompensas.
  */
 
 const App = {
 
-  /** Estado global de la aplicación */
   state: {
     currentScreen: 'splash',
-    unlockedDinos:  JSON.parse(localStorage.getItem('dinopc_unlocked') || '[]'),
+    unlockedDinos: JSON.parse(localStorage.getItem('dinopc_unlocked') || '[]'),
+    settings:      JSON.parse(localStorage.getItem('dinopc_settings')  || '{"labName":"DinoPC Lab","accent":"neon"}'),
     fileSystem: {
       name:     'Mis Expediciones',
       type:     'folder',
@@ -16,14 +16,16 @@ const App = {
     }
   },
 
-  /** Punto de entrada: arranca al cargar el DOM */
+  // ─── Arranque ─────────────────────────────────────
+
   init() {
+    DinoLog.load();
     this.showSplash();
-    this._updateClock(); // Iniciar reloj aunque el escritorio no esté visible aún
-    console.log('🦕 DinoPC Explorer v1.0 iniciado');
+    this._applyAccent(this.state.settings.accent);
+    console.log('🦕 DinoPC Explorer v1.1 iniciado');
   },
 
-  // ─── Navegación entre pantallas ─────────────────────────────
+  // ─── Navegación ───────────────────────────────────
 
   showScreen(id) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -31,43 +33,42 @@ const App = {
     this.state.currentScreen = id;
   },
 
-  showSplash() {
-    this.showScreen('splash');
+  showSplash() { this.showScreen('splash'); },
+
+  /**
+   * Desde el botón JUGAR: nuevos jugadores ven el tutorial,
+   * jugadores que ya desbloquearon algo van directo al escritorio.
+   */
+  startGame() {
+    if (this.state.unlockedDinos.length === 0) {
+      Tutorial.show();
+    } else {
+      this.startDesktop();
+    }
   },
 
-  /** Inicia el juego: muestra el escritorio e inicializa módulos */
-  startGame() {
+  /** Inicia el escritorio (llamado desde tutorial o directamente) */
+  startDesktop() {
+    // Limpiar sistema de archivos de sesiones anteriores
+    this.state.fileSystem.children = {};
     this.showScreen('desktop');
     Desktop.init();
     Mission.init();
-
-    // Saludo del guía al entrar
-    setTimeout(() => {
-      Desktop.showGuide(
-        '¡Bienvenido! Soy Rex 🦕, tu guía científico. ' +
-        'Tu misión: crear una expedición para el Spinosaurio. ' +
-        '¡Empieza abriendo "Mis Expediciones" con doble clic!'
-      );
-    }, 600);
+    DinoLog.track('session');
+    this._applyLabName(this.state.settings.labName);
   },
 
-  /** Muestra la pantalla de colección */
   showCollection() {
     this.showScreen('collection');
     Collection.render();
   },
 
-  // ─── Sistema de desbloqueo ───────────────────────────────────
+  // ─── Desbloqueo de dinosaurios ───────────────────
 
-  /**
-   * Desbloquea un dinosaurio y muestra su recompensa.
-   * @param {string} dinoId  - Clave del dinosaurio en Collection.data
-   */
   unlockDino(dinoId) {
     const dino = Collection.data[dinoId];
     if (!dino) return;
 
-    // Registrar en colección si no estaba
     if (!this.state.unlockedDinos.includes(dinoId)) {
       this.state.unlockedDinos.push(dinoId);
       localStorage.setItem('dinopc_unlocked', JSON.stringify(this.state.unlockedDinos));
@@ -79,23 +80,50 @@ const App = {
 
   closeReward() {
     document.getElementById('reward-modal').classList.add('hidden');
+    // Si hay una siguiente misión, reiniciar pasos
+    if (!Mission.allComplete) {
+      Mission._completedSteps = [];
+      Mission._renderPanel();
+      Desktop.showGuide(Mission.current.intro, 9000);
+    }
   },
 
-  // ─── Privado ─────────────────────────────────────────────────
+  // ─── Settings ────────────────────────────────────
+
+  applySettings({ labName, accent }) {
+    this.state.settings = { labName, accent };
+    localStorage.setItem('dinopc_settings', JSON.stringify(this.state.settings));
+    this._applyAccent(accent);
+    this._applyLabName(labName);
+  },
+
+  _applyAccent(key) {
+    const schemes = (typeof Settings !== 'undefined') ? Settings.SCHEMES : null;
+    if (!schemes || !schemes[key]) return;
+    const s = schemes[key];
+    document.documentElement.style.setProperty('--neon',      s.neon);
+    document.documentElement.style.setProperty('--neon-dim',  s.dim);
+    document.documentElement.style.setProperty('--neon-glow', s.neon + '33');
+  },
+
+  _applyLabName(name) {
+    const tbStart = document.querySelector('.tb-start');
+    if (tbStart) tbStart.innerHTML = `<span>🦕</span> ${name}`;
+    const smName = document.querySelector('.sm-info b');
+    if (smName) smName.textContent = name;
+  },
+
+  // ─── Reward modal ─────────────────────────────────
 
   _renderReward(dino) {
     document.getElementById('reward-name').textContent = dino.name;
 
-    // Mostrar imagen real si existe; si no, emoji de fallback
     const artEl = document.getElementById('reward-dino-art');
-    if (dino.id === 'spinosaurus') {
+    if (dino.cardImg) {
       artEl.innerHTML = `
-        <img src="assets/images/spinosaurus_victory.png"
-             class="reward-dino-img"
-             alt="${dino.name}"
+        <img src="${dino.cardImg}" class="reward-dino-img" alt="${dino.name}"
              onerror="this.replaceWith(Object.assign(document.createElement('span'),
-               {textContent:'${dino.emoji}',style:'font-size:60px'}))">
-      `;
+               {textContent:'${dino.emoji}',style:'font-size:60px'}))">`;
     } else {
       artEl.textContent = dino.emoji;
     }
@@ -104,23 +132,10 @@ const App = {
       <div><b>⚖️ Peso</b><span>${dino.weight}</span></div>
       <div><b>📏 Longitud</b><span>${dino.size}</span></div>
       <div><b>🍖 Dieta</b><span>${dino.diet}</span></div>
-      <div><b>🕰️ Período</b><span>${dino.period}</span></div>
-    `;
+      <div><b>🕰️ Período</b><span>${dino.period}</span></div>`;
 
     document.getElementById('reward-fact').textContent = '💡 ' + dino.fact;
-  },
-
-  _updateClock() {
-    const el = document.getElementById('tb-clock');
-    if (!el) return;
-    const now = new Date();
-    const h = String(now.getHours()).padStart(2, '0');
-    const m = String(now.getMinutes()).padStart(2, '0');
-    el.textContent = h + ':' + m;
-    setTimeout(() => this._updateClock(), 10000);
   }
-
 };
 
-// Arrancar al cargar el DOM
 window.addEventListener('DOMContentLoaded', () => App.init());

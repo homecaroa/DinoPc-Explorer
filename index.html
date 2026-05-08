@@ -49,6 +49,31 @@
   </div>
 
   <!-- ═══════════════════════════════════════════
+       PANTALLA TUTORIAL
+  ═══════════════════════════════════════════ -->
+  <div id="screen-tutorial" class="screen">
+    <div class="lab-bg"><div class="lab-grid"></div><div class="lab-scanlines"></div></div>
+    <button class="tut-skip" onclick="Tutorial.skip()">Saltar ↩</button>
+    <div class="tut-container">
+      <div class="tut-card" id="tut-card">
+        <div class="tut-rex-col">
+          <img id="tut-rex-img" src="assets/images/spinosaurus_tutorial.png"
+               class="tut-rex-img" alt="Rex">
+        </div>
+        <div class="tut-content-col">
+          <div class="tut-icon" id="tut-icon">📄</div>
+          <h2 class="tut-title" id="tut-title">Cargando…</h2>
+          <p  class="tut-body"  id="tut-body"></p>
+          <div class="tut-visual" id="tut-visual"></div>
+          <div class="tut-dots"   id="tut-dots"></div>
+          <button class="btn-primary tut-next" id="tut-next-btn"
+                  onclick="Tutorial.next()">Siguiente →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
        PANTALLA DESKTOP
   ═══════════════════════════════════════════ -->
   <div id="screen-desktop" class="screen">
@@ -79,6 +104,14 @@
       <div class="desktop-icon" id="dsk-trash" onclick="Desktop.clickIcon('trash', this)">
         <div class="dsk-icon tr-ico"></div>
         <span>Papelera</span>
+      </div>
+      <div class="desktop-icon" id="dsk-settings" onclick="Desktop.clickIcon('settings', this)">
+        <div class="dsk-icon settings-ico"></div>
+        <span>Configuración</span>
+      </div>
+      <div class="desktop-icon" id="dsk-dinoLog" onclick="Desktop.clickIcon('dinoLog', this)">
+        <div class="dsk-icon log-ico"></div>
+        <span>Diario DinoPC</span>
       </div>
     </div>
 
@@ -117,6 +150,9 @@
         <div class="sm-item" onclick="Desktop.openWindow('dinoword'); Desktop.closeStart()">📝 DinoWord</div>
         <div class="sm-item" onclick="Desktop.openWindow('minigame'); Desktop.closeStart()">🎮 Rescate del Río</div>
         <div class="sm-item" onclick="Desktop.openWindow('quiz'); Desktop.closeStart()">🧠 DinoQuiz</div>
+        <div class="sm-sep"></div>
+        <div class="sm-item" onclick="Desktop.openWindow('settings'); Desktop.closeStart()">⚙️ Configuración</div>
+        <div class="sm-item" onclick="Desktop.openWindow('dinoLog'); Desktop.closeStart()">📊 Diario DinoPC</div>
         <div class="sm-sep"></div>
         <div class="sm-item" onclick="App.showCollection()">🏆 Colección</div>
         <div class="sm-item danger" onclick="App.showSplash()">⏻ Salir al menú</div>
@@ -165,11 +201,13 @@
   </div>
 
   <!-- Scripts (orden importante) -->
+  <script src="js/dinoLog.js"></script>
   <script src="js/collection.js"></script>
   <script src="js/quiz.js"></script>
   <script src="js/minigame.js"></script>
   <script src="js/mission.js"></script>
   <script src="js/desktop.js"></script>
+  <script src="js/tutorial.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

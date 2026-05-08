@@ -30,9 +30,8 @@ const Collection = {
       size:    '12–13 metros',
       diet:    'Carnívoro (cazador/carroñero)',
       period:  'Cretácico tardío (68–66 Ma)',
-      fact:    '¡Próximamente! Completa más misiones para desbloquear la ficha del T-Rex.',
-      color:   '#ff6644',
-      locked:  true
+      fact:    'El T-Rex tenía la mordida más poderosa de la historia animal y sentidos excepcionales para cazar.',
+      color:   '#ff6644'
     },
     triceratops: {
       id:      'triceratops',
@@ -43,9 +42,8 @@ const Collection = {
       size:    '8–9 metros',
       diet:    'Herbívoro',
       period:  'Cretácico tardío (68–66 Ma)',
-      fact:    '¡Próximamente! Resuelve el quiz del Triceratops para desbloquear su ficha.',
-      color:   '#4488ff',
-      locked:  true
+      fact:    'El Triceratops era contemporáneo del T-Rex y su collarín óseo podía medir hasta 2 metros de diámetro.',
+      color:   '#4488ff'
     },
     velociraptor: {
       id:      'velociraptor',

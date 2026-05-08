@@ -53,6 +53,13 @@ const Desktop = {
           !e.target.closest('.tb-start')) {
         sm.classList.add('hidden');
       }
+
+      // Deseleccionar icono si se hace clic en el escritorio (no en un icono)
+      if (!e.target.closest('.desktop-icon') && this._selectedIcon) {
+        this._selectedIcon.classList.remove('selected');
+        clearTimeout(this._iconTimers[this._selectedIcon.id]);
+        this._selectedIcon = null;
+      }
     });
   },
 
@@ -126,24 +133,43 @@ const Desktop = {
     const win = document.getElementById('win-' + id);
     if (!win) return;
     const isMax = win.dataset.max === '1';
+
     if (isMax) {
-      // Restaurar
-      win.style.width  = win.dataset.pw;
-      win.style.height = win.dataset.ph;
-      win.style.left   = win.dataset.px;
-      win.style.top    = win.dataset.py;
-      win.dataset.max  = '0';
+      // ── Restaurar ──
+      win.style.width    = win.dataset.pw;
+      win.style.height   = win.dataset.ph;
+      win.style.left     = win.dataset.px;
+      win.style.top      = win.dataset.py;
+      win.style.zIndex   = win.dataset.pz || this.zCounter;
+      win.style.borderRadius = '';
+      win.dataset.max    = '0';
+      // Volver a mostrar panel de misión
+      document.getElementById('mission-panel').style.display = '';
+      // Quitar botón de restauración y volver a cuadrado
+      const btn = win.querySelector('.win-btn.maximize');
+      if (btn) btn.textContent = '□';
     } else {
-      // Guardar estado previo
+      // ── Guardar estado previo y maximizar ──
       win.dataset.pw   = win.style.width;
       win.dataset.ph   = win.style.height;
       win.dataset.px   = win.style.left;
       win.dataset.py   = win.style.top;
-      win.style.width  = '100vw';
-      win.style.height = 'calc(100vh - 44px)';
-      win.style.left   = '0';
-      win.style.top    = '0';
+      win.dataset.pz   = win.style.zIndex;
+
+      win.style.width        = '100vw';
+      win.style.height       = 'calc(100vh - 44px)';
+      win.style.left         = '0';
+      win.style.top          = '0';
+      win.style.borderRadius = '0';
+      // Z-index por encima del panel de misión (900) y de otros iconos,
+      // pero por debajo de la barra de tareas (1000)
+      win.style.zIndex = '960';
       win.dataset.max  = '1';
+      // Ocultar panel de misión para que no tape los controles
+      document.getElementById('mission-panel').style.display = 'none';
+      // Cambiar icono a símbolo de restaurar
+      const btn = win.querySelector('.win-btn.maximize');
+      if (btn) btn.textContent = '❐';
     }
   },
 
@@ -151,9 +177,47 @@ const Desktop = {
     const win = document.getElementById('win-' + id);
     if (!win) return;
     win.style.display = '';
-    win.style.zIndex  = ++this.zCounter;
+    // Solo cambiar z-index si no está maximizado (si está maximizado, se queda en 960)
+    if (win.dataset.max !== '1') {
+      win.style.zIndex = ++this.zCounter;
+    }
     if (this.openWins[id]) this.openWins[id].minimized = false;
     document.querySelector(`.tb-item[data-id="${id}"]`)?.classList.remove('minimized');
+  },
+
+  // ─── Clic en iconos del escritorio ───────────────
+  // Sistema de doble-clic manual: primer clic → seleccionar + tooltip,
+  // segundo clic rápido (o espera breve) → abrir ventana.
+
+  _iconTimers:   {},
+  _selectedIcon: null,
+
+  clickIcon(windowId, el) {
+    // Deseleccionar el anterior si es diferente
+    if (this._selectedIcon && this._selectedIcon !== el) {
+      this._selectedIcon.classList.remove('selected');
+      clearTimeout(this._iconTimers[this._selectedIcon.id]);
+    }
+
+    if (el.classList.contains('selected')) {
+      // ── Segundo clic en el mismo icono seleccionado → abrir ──
+      clearTimeout(this._iconTimers[el.id]);
+      el.classList.remove('selected');
+      this._selectedIcon = null;
+      this.openWindow(windowId);
+    } else {
+      // ── Primer clic → seleccionar ──
+      el.classList.add('selected');
+      this._selectedIcon = el;
+      // Auto-abrir tras 600 ms sin un segundo clic (mejora UX para niños)
+      this._iconTimers[el.id] = setTimeout(() => {
+        if (el.classList.contains('selected')) {
+          el.classList.remove('selected');
+          this._selectedIcon = null;
+          this.openWindow(windowId);
+        }
+      }, 650);
+    }
   },
 
   // ─── Barra de tareas ──────────────────────────────

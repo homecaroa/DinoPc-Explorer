@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <title>DinoPC Explorer 🦕</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════
+       PANTALLA SPLASH
+  ═══════════════════════════════════════════ -->
+  <div id="screen-splash" class="screen active">
+    <div class="lab-bg">
+      <div class="lab-grid"></div>
+      <div class="lab-scanlines"></div>
+      <div class="lab-glow-left"></div>
+      <div class="lab-glow-right"></div>
+      <div class="amber-tube t1"><div class="amber-liquid"></div><div class="amber-dna">🧬</div></div>
+      <div class="amber-tube t2"><div class="amber-liquid"></div><div class="amber-dna">🧬</div></div>
+      <div class="amber-tube t3"><div class="amber-liquid"></div><div class="amber-dna">🦕</div></div>
+    </div>
+
+    <div class="splash-content">
+      <!-- Spinosaurus real image -->
+      <div class="splash-dino">
+        <img src="assets/images/spinosaurus_idle.png"
+             class="spino-main-img"
+             alt="Spinosaurus — DinoPC Explorer">
+        <div class="spino-glow-ring"></div>
+      </div>
+
+      <div class="logo-block">
+        <h1 class="logo-title">DinoPC <span>Explorer</span></h1>
+        <p class="logo-sub">◈ Sistema Operativo Jurásico ◈</p>
+      </div>
+
+      <div class="splash-btns">
+        <button class="btn-primary" onclick="App.startGame()">
+          <span class="btn-icon">▶</span> JUGAR
+        </button>
+        <button class="btn-secondary" onclick="App.showCollection()">
+          <span class="btn-icon">🏆</span> COLECCIÓN
+        </button>
+      </div>
+      <p class="splash-version">v1.0 · Para exploradores de 7-10 años · 🦕 DinoPC Labs</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       PANTALLA DESKTOP
+  ═══════════════════════════════════════════ -->
+  <div id="screen-desktop" class="screen">
+    <!-- Wallpaper -->
+    <div class="desktop-wallpaper">
+      <div class="wall-grid"></div>
+      <div class="wall-dino-bg"></div>
+    </div>
+
+    <!-- Iconos del escritorio -->
+    <div id="desktop-area">
+      <div class="desktop-icon" ondblclick="Desktop.openWindow('file-explorer')">
+        <div class="dsk-icon fe-ico"></div>
+        <span>Mis Expediciones</span>
+      </div>
+      <div class="desktop-icon" ondblclick="Desktop.openWindow('dinoword')">
+        <div class="dsk-icon dw-ico"></div>
+        <span>DinoWord</span>
+      </div>
+      <div class="desktop-icon" ondblclick="Desktop.openWindow('minigame')">
+        <div class="dsk-icon mg-ico"></div>
+        <span>Rescate del Río</span>
+      </div>
+      <div class="desktop-icon" ondblclick="Desktop.openWindow('quiz')">
+        <div class="dsk-icon qz-ico"></div>
+        <span>DinoQuiz</span>
+      </div>
+      <div class="desktop-icon" ondblclick="Desktop.openWindow('trash')">
+        <div class="dsk-icon tr-ico"></div>
+        <span>Papelera</span>
+      </div>
+    </div>
+
+    <!-- Guía Spinosaurio -->
+    <div id="spino-guide" class="spino-guide hidden">
+      <div class="guide-avatar">
+        <img src="assets/images/spinosaurus_talking.png"
+             class="guide-img" alt="Rex el guía">
+      </div>
+      <div class="guide-bubble">
+        <span id="guide-text">¡Hola!</span>
+        <button class="guide-close" onclick="Desktop.closeGuide()">✕</button>
+      </div>
+    </div>
+
+    <!-- Contenedor de ventanas -->
+    <div id="windows-container"></div>
+
+    <!-- Panel de misión -->
+    <div id="mission-panel">
+      <div class="mp-header">
+        <span>🦕 MISIÓN: Expedición Spinosaurio</span>
+        <button class="mp-toggle" onclick="Mission.togglePanel()">▼</button>
+      </div>
+      <div id="mp-steps" class="mp-steps"></div>
+    </div>
+
+    <!-- Menú Inicio -->
+    <div id="start-menu" class="hidden">
+      <div class="sm-header">
+        <div class="sm-avatar">🦕</div>
+        <div class="sm-info"><b>Explorador</b><small>DinoPC OS v1.0</small></div>
+      </div>
+      <nav class="sm-nav">
+        <div class="sm-item" onclick="Desktop.openWindow('file-explorer'); Desktop.closeStart()">📁 Mis Expediciones</div>
+        <div class="sm-item" onclick="Desktop.openWindow('dinoword'); Desktop.closeStart()">📝 DinoWord</div>
+        <div class="sm-item" onclick="Desktop.openWindow('minigame'); Desktop.closeStart()">🎮 Rescate del Río</div>
+        <div class="sm-item" onclick="Desktop.openWindow('quiz'); Desktop.closeStart()">🧠 DinoQuiz</div>
+        <div class="sm-sep"></div>
+        <div class="sm-item" onclick="App.showCollection()">🏆 Colección</div>
+        <div class="sm-item danger" onclick="App.showSplash()">⏻ Salir al menú</div>
+      </nav>
+    </div>
+
+    <!-- Barra de tareas -->
+    <div id="taskbar">
+      <button class="tb-start" onclick="Desktop.toggleStart()">
+        <span>🦕</span> DinoPC
+      </button>
+      <div id="tb-items"></div>
+      <div class="tb-tray">
+        <span class="tb-clock" id="tb-clock">00:00</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       PANTALLA COLECCIÓN
+  ═══════════════════════════════════════════ -->
+  <div id="screen-collection" class="screen">
+    <div class="coll-bg"></div>
+    <div class="coll-content">
+      <header class="coll-header">
+        <h2>🦴 Colección de Dinosaurios</h2>
+        <button class="btn-back" onclick="App.showSplash()">← Volver</button>
+      </header>
+      <div id="coll-grid" class="coll-grid"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       MODAL DE RECOMPENSA
+  ═══════════════════════════════════════════ -->
+  <div id="reward-modal" class="modal-overlay hidden">
+    <div class="modal-box reward-box">
+      <div class="reward-badge">🏆</div>
+      <h2 class="reward-title">¡FICHA DESBLOQUEADA!</h2>
+      <div class="reward-dino-wrap" id="reward-dino-art"></div>
+      <h3 id="reward-name" class="reward-dino-name"></h3>
+      <div id="reward-stats" class="reward-stats"></div>
+      <p id="reward-fact" class="reward-fact"></p>
+      <button class="btn-primary reward-btn" onclick="App.closeReward()">¡Increíble! 🦕</button>
+    </div>
+  </div>
+
+  <!-- Scripts (orden importante) -->
+  <script src="js/collection.js"></script>
+  <script src="js/quiz.js"></script>
+  <script src="js/minigame.js"></script>
+  <script src="js/mission.js"></script>
+  <script src="js/desktop.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

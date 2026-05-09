@@ -128,11 +128,13 @@ const Minigame = {
         if (item.type === 'doc') {
           g.score += 10;
           this._burst(item.x, item.y, '#ffb700', 8);
+          AudioEngine.play('coin');
           return false;
         } else if (item.type === 'virus' && !item.hit) {
           g.score  = Math.max(0, g.score - 5);
           item.hit = true;
           this._burst(item.x, item.y, '#ff2244', 6);
+          AudioEngine.play('error');
           setTimeout(() => { if (item) item.hit = false; }, 400);
         }
       }
@@ -178,6 +180,7 @@ const Minigame = {
     this.game.over    = true;
     this.timers.forEach(clearInterval);
     this.timers = [];
+    Achievements.check('minigame-score', this.game.score);
     this._draw(); // Frame final
   },
 

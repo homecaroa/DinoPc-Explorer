@@ -20,8 +20,14 @@ const App = {
 
   init() {
     DinoLog.load();
-    this.showSplash();
+    AudioEngine.init();
     this._applyAccent(this.state.settings.accent);
+    // Si ya hay un perfil activo, ir a splash directamente
+    if (Auth.isLoggedIn()) {
+      this.showSplash();
+    } else {
+      this.showScreen('login');
+    }
     console.log('🦕 DinoPC Explorer v1.1 iniciado');
   },
 
@@ -33,7 +39,31 @@ const App = {
     this.state.currentScreen = id;
   },
 
-  showSplash() { this.showScreen('splash'); },
+  showSplash() {
+    AudioEngine.stopAmbient();
+    this.showScreen('splash');
+    // Mostrar nombre del explorador activo si existe
+    const user = Auth.getUser();
+    const hint = document.querySelector('.splash-version');
+    if (hint && user) hint.textContent = '👤 ' + user.username + ' · v1.0 · 🦕 DinoPC Labs';
+  },
+
+  /** Botón JUGAR del splash → va a login si no hay sesión */
+  goToLogin() {
+    if (Auth.isLoggedIn()) {
+      this.startGame();
+    } else {
+      this.showScreen('login');
+    }
+  },
+
+  /** Callback tras login/registro exitoso en Auth */
+  onAuthSuccess(user) {
+    this.showSplash();
+    Desktop.showGuide && setTimeout(() =>
+      Desktop.showGuide && Desktop.showGuide('¡Hola, ' + user.username + '! 🦕 Bienvenido al laboratorio.'), 200
+    );
+  },
 
   /**
    * Desde el botón JUGAR: nuevos jugadores ven el tutorial,
@@ -49,13 +79,17 @@ const App = {
 
   /** Inicia el escritorio (llamado desde tutorial o directamente) */
   startDesktop() {
-    // Limpiar sistema de archivos de sesiones anteriores
     this.state.fileSystem.children = {};
     this.showScreen('desktop');
     Desktop.init();
     Mission.init();
     DinoLog.track('session');
+    Achievements.resetSession();
     this._applyLabName(this.state.settings.labName);
+    AudioEngine.startAmbient();
+    // Sincronizar botón de sonido en taskbar
+    const btn = document.getElementById('tb-sound');
+    if (btn) btn.textContent = AudioEngine.isMuted ? '🔇' : '🔊';
   },
 
   showCollection() {
@@ -72,6 +106,7 @@ const App = {
     if (!this.state.unlockedDinos.includes(dinoId)) {
       this.state.unlockedDinos.push(dinoId);
       localStorage.setItem('dinopc_unlocked', JSON.stringify(this.state.unlockedDinos));
+      Achievements.check('dino-unlock', this.state.unlockedDinos.length);
     }
 
     this._renderReward(dino);

@@ -113,8 +113,11 @@ const Desktop = {
     // Inicializar módulo
     if (tpl.init) tpl.init();
 
-    // Notificar a la misión
-    Mission.onAction('open-window', { id });
+    // Notificar misión — solo cuando se abre DinoWord
+    if (id === 'dinoword') Mission.onAction('window-opened', { id });
+
+    // Logro explorador: registrar ventana abierta
+    Achievements.trackExploration(id);
   },
 
   closeWindow(id) {
@@ -369,7 +372,7 @@ const FileExplorer = {
     fs.children[name] = { type: 'folder', children: {} };
     this.render();
 
-    Mission.onAction('create-folder', { name });
+    Mission.onAction('folder-created', { name });
     Desktop.showGuide('✅ ¡Carpeta "' + name + '" creada! Ahora abre DinoWord y escribe el informe.');
   },
 
@@ -381,8 +384,14 @@ const FileExplorer = {
 
   /** Mueve un archivo a la primera carpeta disponible */
   moveFile(filename) {
-    const fs = App.state.fileSystem;
+    // Validar que el paso previo esté completado antes de mover
+    const check = Mission.canDoStep('move-file');
+    if (!check.allowed) {
+      Desktop.showGuide('💡 ' + check.reason);
+      return;
+    }
 
+    const fs = App.state.fileSystem;
     const folderEntry = Object.entries(fs.children)
       .find(([, v]) => v.type === 'folder');
 
@@ -396,10 +405,8 @@ const FileExplorer = {
     delete fs.children[filename];
     this.render();
 
-    Mission.onAction('move-file', { filename, folder: folderName });
-    Desktop.showGuide(
-      '🗂️ "' + filename + '" movido a "' + folderName + '". ¡Paso completado! 🎉'
-    );
+    Mission.onAction('file-moved', { filename, folder: folderName });
+    Desktop.showGuide('🗂️ "' + filename + '" movido a "' + folderName + '". ¡Paso completado! 🎉');
   }
 };
 
@@ -454,11 +461,20 @@ const DinoWord = {
 
     if (value.includes(this.TARGET_TEXT)) {
       if (!this._textTyped) {
+        // Verificar que el paso anterior esté completo antes de registrar
+        const check = Mission.canDoStep('type-text');
+        if (!check.allowed) {
+          Desktop.showGuide('💡 ' + check.reason);
+          status.textContent = '⚠️ ' + check.reason;
+          status.className   = 'dw-status';
+          return;
+        }
         this._textTyped = true;
-        Mission.onAction('type-text', { value });
-        status.textContent = '✅ ¡Texto correcto! Ahora guarda el archivo con el botón "💾 Guardar".';
+        Mission.onAction('text-typed', { value });
+        status.textContent = '✅ ¡Texto correcto! Ahora guarda el archivo con "💾 Guardar".';
         status.className   = 'dw-status ok';
-        Desktop.showGuide('¡Perfecto! 🦕 Ahora guarda el archivo. Asegúrate de que el nombre sea "informe_spino.doc".');
+        const fn = Mission.current ? Mission.current.fileName : 'el archivo';
+        Desktop.showGuide('¡Perfecto! 🦕 Guarda el archivo. Asegúrate de que el nombre sea "' + fn + '".');
       }
     } else {
       status.textContent = '✏️ Escribiendo… ' + value.length + ' caracteres';
@@ -472,6 +488,7 @@ const DinoWord = {
     const status     = document.getElementById('dw-status');
 
     const filename = filenameEl?.value.trim();
+    this._currentFileName = filename; // Expuesto para integration-test.js
     const content  = contentEl?.value.trim();
 
     if (!filename) {
@@ -488,13 +505,15 @@ const DinoWord = {
     // Añadir al sistema de archivos virtual
     FileExplorer.addFile(filename, content);
     DinoLog.track('file');
+    AudioEngine.play('file-saved');
+    Achievements.check('file-count', DinoLog.data.files);
 
     if (status) {
       status.textContent = '💾 Guardado: ' + filename + ' ✅';
       status.className   = 'dw-status ok';
     }
 
-    Mission.onAction('save-file', { filename, content });
+    Mission.onAction('file-saved', { filename, content });
 
     Desktop.showGuide(
       '💾 Archivo "' + filename + '" guardado. ' +
@@ -527,6 +546,17 @@ const Settings = {
 
     return `
       <div class="settings-wrap">
+        <div class="settings-sec">
+          <label class="setting-lbl">🔊 Sonido</label>
+          <label class="sound-toggle-lbl">
+            <input type="checkbox" id="sound-check"
+                   ${!AudioEngine.isMuted ? 'checked' : ''}
+                   onchange="AudioEngine[this.checked ? 'unmute' : 'mute']();
+                             const btn=document.getElementById('tb-sound');
+                             if(btn) btn.textContent=AudioEngine.isMuted?'🔇':'🔊'">
+            <span>Efectos de sonido activados</span>
+          </label>
+        </div>
         <div class="settings-sec">
           <label class="setting-lbl">🏷️ Nombre del Laboratorio</label>
           <input type="text" id="lab-name-input" class="setting-input"

@@ -37,7 +37,7 @@
       </div>
 
       <div class="splash-btns">
-        <button class="btn-primary" onclick="App.startGame()">
+        <button class="btn-primary" onclick="App.goToLogin()">
           <span class="btn-icon">▶</span> JUGAR
         </button>
         <button class="btn-secondary" onclick="App.showCollection()">
@@ -45,6 +45,69 @@
         </button>
       </div>
       <p class="splash-version">v1.0 · Para exploradores de 7-10 años · 🦕 DinoPC Labs</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════
+       PANTALLA LOGIN / REGISTRO
+  ═══════════════════════════════════════════ -->
+  <div id="screen-login" class="screen">
+    <div class="lab-bg"><div class="lab-grid"></div><div class="lab-scanlines"></div></div>
+    <div class="login-container">
+      <div class="login-card">
+
+        <div class="login-logo">
+          <span>🦕</span>
+          <div>
+            <h2 class="login-title">DinoPC <span>Explorer</span></h2>
+            <p class="login-sub">Identifica tu expedición</p>
+          </div>
+        </div>
+
+        <div class="login-tabs">
+          <button class="login-tab active" onclick="Auth.showTab('login')">Entrar</button>
+          <button class="login-tab"        onclick="Auth.showTab('register')">Nuevo perfil</button>
+        </div>
+
+        <!-- Formulario Login -->
+        <div id="login-form">
+          <div class="login-field">
+            <label>👤 Nombre o email</label>
+            <input type="text" id="login-user" placeholder="tu_nombre o padre@email.com"
+                   onkeydown="if(event.key==='Enter') Auth.doLogin()">
+          </div>
+          <div class="login-field">
+            <label>🔐 Contraseña <span class="optional">(si configuraste una)</span></label>
+            <input type="password" id="login-pass" placeholder="••••"
+                   onkeydown="if(event.key==='Enter') Auth.doLogin()">
+          </div>
+          <div class="login-error hidden" id="login-err"></div>
+          <button class="btn-primary login-btn" onclick="Auth.doLogin()">▶ Entrar</button>
+        </div>
+
+        <!-- Formulario Registro -->
+        <div id="register-form" class="hidden">
+          <div class="login-field">
+            <label>👤 Nombre de explorador <span class="required">*</span></label>
+            <input type="text" id="reg-name" placeholder="Ej: PequeñoRex" maxlength="30">
+          </div>
+          <div class="login-field">
+            <label>📧 Email del padre/tutor <span class="optional">(opcional)</span></label>
+            <input type="email" id="reg-email" placeholder="padre@email.com">
+          </div>
+          <div class="login-field">
+            <label>🔐 Contraseña <span class="optional">(opcional, mín. 4 caracteres)</span></label>
+            <input type="password" id="reg-pass" placeholder="••••">
+          </div>
+          <p class="login-note">
+            📧 Si añades email, se abrirá tu cliente de correo para enviar confirmaciones de misiones.<br>
+            🔒 Todos los datos se guardan solo en <b>este dispositivo</b>.
+          </p>
+          <div class="login-error hidden" id="reg-err"></div>
+          <button class="btn-primary login-btn" onclick="Auth.doRegister()">🦕 Crear perfil</button>
+        </div>
+
+      </div>
     </div>
   </div>
 
@@ -166,6 +229,10 @@
       </button>
       <div id="tb-items"></div>
       <div class="tb-tray">
+        <button id="tb-sound" class="tb-sound" title="Activar / Silenciar"
+                onclick="const on=AudioEngine.toggle(); this.textContent=on?'🔊':'🔇'; const c=document.getElementById('sound-check'); if(c) c.checked=on;">
+          🔊
+        </button>
         <span class="tb-clock" id="tb-clock">00:00</span>
       </div>
     </div>
@@ -202,6 +269,9 @@
 
   <!-- Scripts (orden importante) -->
   <script src="js/dinoLog.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/achievements.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/collection.js"></script>
   <script src="js/quiz.js"></script>
   <script src="js/minigame.js"></script>

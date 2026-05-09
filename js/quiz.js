@@ -99,10 +99,12 @@ const Quiz = {
 
   init() {
     var bank = this.BANKS[this.forDino] || this.BANKS.spinosaurus;
-    this.questions = bank.slice().sort(function() { return Math.random() - 0.5; }).slice(0, 3);
-    this.current   = 0;
-    this.score     = 0;
-    this.answered  = false;
+    this.questions     = bank.slice().sort(function() { return Math.random() - 0.5; }).slice(0, 3);
+    this.current       = 0;
+    this.score         = 0;
+    this.answered      = false;
+    this.quizStartTime = Date.now();
+    this.correctStreak = 0;
     this._renderQuestion();
   },
 
@@ -146,6 +148,8 @@ const Quiz = {
     var q  = this.questions[this.current];
     var ok = idx === q.ans;
     if (ok) this.score += 10;
+    AudioEngine.play(ok ? 'success' : 'error');
+    this.correctStreak = ok ? this.correctStreak + 1 : 0;
 
     q.opts.forEach(function(_, i) {
       var btn = document.getElementById('qopt-' + i);
@@ -197,6 +201,9 @@ const Quiz = {
       : '<button class="quiz-next" onclick="Quiz.init()" style="margin-top:8px">🔄 Intentar de nuevo</button>';
 
     DinoLog.track('quiz', { correct: Math.round(this.score / 10), total: total });
+    var elapsed = Date.now() - (this.quizStartTime || Date.now());
+    Achievements.check('quiz-time', elapsed);
+    if (this.correctStreak >= 3) Achievements.check('quiz-streak', 3);
 
     wrap.innerHTML =
       '<div class="quiz-result">' +

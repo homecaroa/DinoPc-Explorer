@@ -14,7 +14,15 @@ const DinoLog = {
     quizCorrect: 0,
     quizTotal:   0,
     firstPlay:   null,
-    lastPlay:    null
+    lastPlay:    null,
+    // ── Matemáticas ──
+    math_correct: 0,
+    math_total:   0,
+    // ── Almacenamiento ──
+    total_files_size:       0,
+    largest_file:           0,
+    storage_overflow_count: 0,
+    missions_no_overflow:   0
   },
 
   // ─── Persistencia ─────────────────────────────────
@@ -44,12 +52,28 @@ const DinoLog = {
         if (!this.data.firstPlay) this.data.firstPlay = today;
         this.data.lastPlay = today;
         break;
-      case 'file':    this.data.files++;    break;
+      case 'file':
+        this.data.files++;
+        if (value && value.size) {
+          this.data.total_files_size = (this.data.total_files_size || 0) + value.size;
+          this.data.largest_file     = Math.max(this.data.largest_file || 0, value.size);
+        }
+        break;
       case 'step':    this.data.steps++;    break;
       case 'mission': this.data.missions++; break;
       case 'quiz':
         this.data.quizCorrect += value?.correct || 0;
         this.data.quizTotal   += value?.total   || 0;
+        break;
+      case 'math-quiz':
+        this.data.math_correct = (this.data.math_correct || 0) + (value?.correct || 0);
+        this.data.math_total   = (this.data.math_total   || 0) + (value?.total   || 0);
+        break;
+      case 'storage-overflow':
+        this.data.storage_overflow_count = (this.data.storage_overflow_count || 0) + 1;
+        break;
+      case 'mission-no-overflow':
+        this.data.missions_no_overflow = (this.data.missions_no_overflow || 0) + 1;
         break;
     }
     this.save();
@@ -94,7 +118,8 @@ const DinoLog = {
         <div class="dl-stat"><div class="dl-si">✅</div><div class="dl-sv">${d.steps}</div><div class="dl-sl">Pasos completados</div></div>
         <div class="dl-stat"><div class="dl-si">🏆</div><div class="dl-sv">${d.missions}/3</div><div class="dl-sl">Misiones</div></div>
         <div class="dl-stat"><div class="dl-si">🧠</div><div class="dl-sv dl-sv-sm">${acc}</div><div class="dl-sl">Aciertos Quiz</div></div>
-        <div class="dl-stat"><div class="dl-si">📅</div><div class="dl-sv dl-sv-sm">${d.firstPlay || '—'}</div><div class="dl-sl">Primera sesión</div></div>
+        <div class="dl-stat"><div class="dl-si">🧮</div><div class="dl-sv dl-sv-sm">${d.math_correct||0}/${d.math_total||0}</div><div class="dl-sl">Matemáticas</div></div>
+        <div class="dl-stat"><div class="dl-si">📦</div><div class="dl-sv dl-sv-sm">${d.total_files_size||0} KB</div><div class="dl-sl">Total guardado</div></div>
       </div>
 
       <div class="dl-missions-title">Progreso de expediciones</div>

@@ -68,6 +68,50 @@ const Achievements = {
       icon: '🌟', title: 'Leyenda del Río',
       description: 'Consigue 200 puntos o más en el minijuego',
       category: 'minigame', trigger: 'minigame-score', goal: 200
+    },
+    // ── Logros Matemáticos ──
+    {
+      id: 'math-whiz',
+      icon: '🧮', title: 'Genio Matemático',
+      description: 'Responde 10 preguntas matemáticas correctamente',
+      category: 'quiz', trigger: 'math-correct-count', goal: 10
+    },
+    {
+      id: 'perfect-math',
+      icon: '✨', title: 'Perfección Matemática',
+      description: 'Contesta todas las preguntas matemáticas de un quiz sin errores',
+      category: 'quiz', trigger: 'perfect-math-quiz', goal: 1
+    },
+    {
+      id: 'multiplication-master',
+      icon: '×', title: 'Maestro de Multiplicaciones',
+      description: 'Resuelve 5 multiplicaciones seguidas sin error',
+      category: 'quiz', trigger: 'multiplication-streak', goal: 5
+    },
+    {
+      id: 'division-champion',
+      icon: '÷', title: 'Campeón de Divisiones',
+      description: 'Resuelve 5 divisiones seguidas sin error',
+      category: 'quiz', trigger: 'division-streak', goal: 5
+    },
+    // ── Logros de Almacenamiento ──
+    {
+      id: 'storage-master',
+      icon: '💾', title: 'Maestro de Almacenamiento',
+      description: 'Usa 95%+ del espacio disponible sin excederte',
+      category: 'files', trigger: 'storage-efficiency', goal: 0.95
+    },
+    {
+      id: 'efficient-files',
+      icon: '⚡', title: 'Guardián Eficiente',
+      description: 'Guarda 5 archivos usando menos de 150 KB en total',
+      category: 'files', trigger: 'file-efficiency', goal: 5
+    },
+    {
+      id: 'no-overflow',
+      icon: '🎯', title: 'Nunca Lleno',
+      description: 'Completa una misión sin exceder el límite de espacio',
+      category: 'files', trigger: 'mission-complete-no-overflow', goal: 1
     }
   ],
 

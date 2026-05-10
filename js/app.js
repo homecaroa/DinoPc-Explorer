@@ -10,9 +10,11 @@ const App = {
     unlockedDinos: JSON.parse(localStorage.getItem('dinopc_unlocked') || '[]'),
     settings:      JSON.parse(localStorage.getItem('dinopc_settings')  || '{"labName":"DinoPC Lab","accent":"neon"}'),
     fileSystem: {
-      name:     'Mis Expediciones',
-      type:     'folder',
-      children: {}
+      name:      'Mis Expediciones',
+      type:      'folder',
+      maxSpace:  1000,   // KB disponibles (se ajusta por misión en Mission.init())
+      usedSpace: 0,      // KB actualmente usados
+      children:  {}
     }
   },
 
@@ -79,7 +81,8 @@ const App = {
 
   /** Inicia el escritorio (llamado desde tutorial o directamente) */
   startDesktop() {
-    this.state.fileSystem.children = {};
+    this.state.fileSystem.children  = {};
+    this.state.fileSystem.usedSpace = 0;
     this.showScreen('desktop');
     Desktop.init();
     Mission.init();

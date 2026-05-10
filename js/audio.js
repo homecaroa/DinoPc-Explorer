@@ -15,6 +15,18 @@ const AudioEngine = {
   isMuted:       false,
   _ambientNodes: [],     // Nodos del drone ambiental activo
 
+  /** Mapa de sonidos — expuesto para tests y extensiones */
+  SOUNDS: {
+    'success':          { freq: 800,  duration: 0.30, pattern: 'beepup',   type: 'sine',     volume: 0.25 },
+    'error':            { freq: 280,  duration: 0.50, pattern: 'beepdown', type: 'sawtooth', volume: 0.18 },
+    'click':            { freq: 600,  duration: 0.08, pattern: 'click',    type: 'square',   volume: 0.12 },
+    'file-saved':       { freq: 880,  duration: 0.28, pattern: 'beepup',   type: 'sine',     volume: 0.20 },
+    'mission-complete': { freq: 523,  duration: 0.90, pattern: 'arpeggio', type: 'sine',     volume: 0.28 },
+    'coin':             { freq: 1050, duration: 0.18, pattern: 'ding',     type: 'sine',     volume: 0.22 },
+    'math-success':     { freq: 1200, duration: 0.28, pattern: 'arpeggio', type: 'sine',     volume: 0.22 },
+    'math-error':       { freq: 180,  duration: 0.55, pattern: 'beepdown', type: 'square',   volume: 0.15 }
+  },
+
   // ═══════════════════════════════════════════
   //  API PÚBLICA
   // ═══════════════════════════════════════════
@@ -48,16 +60,7 @@ const AudioEngine = {
       this.ctx.resume().catch(() => {});
     }
 
-    const SOUNDS = {
-      'success':          { freq: 800,  duration: 0.30, pattern: 'beepup',   type: 'sine',     volume: 0.25 },
-      'error':            { freq: 280,  duration: 0.50, pattern: 'beepdown', type: 'sawtooth', volume: 0.18 },
-      'click':            { freq: 600,  duration: 0.08, pattern: 'click',    type: 'square',   volume: 0.12 },
-      'file-saved':       { freq: 880,  duration: 0.28, pattern: 'beepup',   type: 'sine',     volume: 0.20 },
-      'mission-complete': { freq: 523,  duration: 0.90, pattern: 'arpeggio', type: 'sine',     volume: 0.28 },
-      'coin':             { freq: 1050, duration: 0.18, pattern: 'ding',     type: 'sine',     volume: 0.22 }
-    };
-
-    const base = SOUNDS[soundType];
+    const base = this.SOUNDS[soundType];
     if (!base) return { started: false, duration: 0 };
 
     const cfg = { ...base, ...options };

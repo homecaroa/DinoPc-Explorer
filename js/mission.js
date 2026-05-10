@@ -15,6 +15,7 @@ const Mission = {
       folderName: 'Expedición Spinosaurio',
       targetText: 'El Spinosaurio encontró peces gigantes en el río.',
       fileName:   'informe_spino.doc',
+      maxSpace:   500,
       intro: '¡Bienvenido al laboratorio! 🦕 Tu primera misión: documenta al Spinosaurio, el mayor carnívoro que existió. Empieza creando una carpeta en "Mis Expediciones".'
     },
     {
@@ -23,6 +24,7 @@ const Mission = {
       folderName: 'Expedición TRex',
       targetText: 'El Tiranosaurio Rex fue el depredador más temido del Cretácico tardío.',
       fileName:   'informe_trex.doc',
+      maxSpace:   350,
       intro: '¡Increíble trabajo! 🦖 Ahora estudiaremos al legendario T-Rex. Crea una nueva carpeta y redacta su informe científico en DinoWord.'
     },
     {
@@ -31,7 +33,35 @@ const Mission = {
       folderName: 'Expedición Triceratops',
       targetText: 'El Triceratops usaba sus tres cuernos para defenderse de los depredadores.',
       fileName:   'informe_triceratops.doc',
-      intro: '¡Última expedición! 🦏 El Triceratops nos espera. Es el herbívoro con armadura más famoso del Cretácico.'
+      maxSpace:   250,
+      intro: '¡Genial! 🦏 Ahora el Triceratops. Era el herbívoro con armadura más famoso del Cretácico tardío. ¡Crea su expedición!'
+    },
+    {
+      id: 'velociraptor', num: 4,
+      title: 'Expedición Velociraptor', dino: 'velociraptor',
+      folderName: 'Expedición Velociraptor',
+      targetText: 'El Velociraptor cazaba en equipo y tenía plumas como un pájaro moderno.',
+      fileName:   'informe_veloci.doc',
+      maxSpace:   200,
+      intro: '¡Cuarta misión! 🦎 El Velociraptor nos desafía. ¿Sabías que tenía plumas y era del tamaño de un pavo? ¡Solo tienes 200 KB de espacio!'
+    },
+    {
+      id: 'ankylosaurus', num: 5,
+      title: 'Expedición Ankylosaurus', dino: 'ankylosaurus',
+      folderName: 'Expedición Ankylosaurus',
+      targetText: 'El Ankylosaurus tenía una armadura ósea completa y una cola en forma de maza.',
+      fileName:   'informe_ankylo.doc',
+      maxSpace:   170,
+      intro: '¡Quinta misión! 🐢 El Ankylosaurus, el tanque del Cretácico. Con 170 KB disponibles tendrás que ser muy eficiente. ¡A por ello!'
+    },
+    {
+      id: 'brachiosaurus', num: 6,
+      title: 'Expedición Braquiosaurio', dino: 'brachiosaurus',
+      folderName: 'Expedición Braquiosaurio',
+      targetText: 'El Braquiosaurio era uno de los dinosaurios más grandes que jamás caminaron por la Tierra.',
+      fileName:   'informe_brachio.doc',
+      maxSpace:   140,
+      intro: '🏆 ¡MISIÓN FINAL! 🦒 El Braquiosaurio, el gigante del Jurásico. Con solo 140 KB de espacio, demuestra todo lo aprendido. ¡Eres un auténtico paleontólogo!'
     }
   ],
 
@@ -47,6 +77,7 @@ const Mission = {
 
   _completedSteps: [],
   panelHidden:     false,
+  hadNoOverflow:   true,   // se pone false si ocurre storage-exceeded
 
   // ─── Getters ──────────────────────────────────────
 
@@ -90,6 +121,10 @@ const Mission = {
 
   init() {
     this._completedSteps = [];
+    this.hadNoOverflow   = true;
+    // Aplicar límite de espacio de esta misión
+    App.state.fileSystem.usedSpace = 0;
+    App.state.fileSystem.maxSpace  = this.current.maxSpace || 1000;
     this._renderPanel();
     setTimeout(() => Desktop.showGuide(
       this.allComplete
@@ -108,6 +143,13 @@ const Mission = {
   onAction(action, data) {
     data = data || {};
     if (this.allComplete) return { success: false };
+
+    // Acción especial: exceso de almacenamiento (no completa pasos)
+    if (action === 'storage-exceeded') {
+      this.hadNoOverflow = false;
+      DinoLog.track('storage-overflow');
+      return { success: false };
+    }
 
     const stepId = this._resolveStep(action, data);
     if (!stepId) return { success: false };
@@ -166,6 +208,12 @@ const Mission = {
     AudioEngine.play('mission-complete');
     Achievements.check('mission-complete', DinoLog.data.missions);
 
+    // Logro: misión sin exceder espacio
+    if (this.hadNoOverflow) {
+      DinoLog.track('mission-no-overflow');
+      Achievements.check('mission-complete-no-overflow', 1);
+    }
+
     // Notificación por email al padre/tutor (abre cliente de correo)
     const user = (typeof Auth !== 'undefined') ? Auth.getUser() : null;
     if (user && user.email) {
@@ -193,7 +241,7 @@ const Mission = {
     if (header) {
       header.textContent = all
         ? '🏆 ¡TODAS COMPLETADAS!'
-        : '🦕 MISIÓN ' + m.num + '/3 · ' + m.title.toUpperCase();
+        : '🦕 MISIÓN ' + m.num + '/' + this.MISSIONS.length + ' · ' + m.title.toUpperCase();
     }
 
     if (all) {

@@ -54,9 +54,8 @@ const Collection = {
       size:    '1.8–2 metros',
       diet:    'Carnívoro (pequeñas presas)',
       period:  'Cretácico tardío (75–71 Ma)',
-      fact:    '¡Próximamente! El Velociraptor real era del tamaño de un pavo y estaba cubierto de plumas.',
-      color:   '#ffaa22',
-      locked:  true
+      fact:    'El Velociraptor real era del tamaño de un pavo y estaba cubierto de plumas. Las películas lo hicieron famoso pero ¡mucho más grande de lo que era!',
+      color:   '#ffaa22'
     },
     ankylosaurus: {
       id:      'ankylosaurus',
@@ -67,8 +66,46 @@ const Collection = {
       size:    '6–8 metros',
       diet:    'Herbívoro (plantas bajas)',
       period:  'Cretácico tardío (68–66 Ma)',
-      fact:    '¡Próximamente! El Ankylosaurio tenía una cola en forma de maza que podía romper huesos.',
-      color:   '#66bbaa',
+      fact:    'El Ankylosaurus tenía una cola en forma de maza tan potente que podía romper los huesos de un T-Rex. ¡El dinosaurio más acorazado de la historia!',
+      color:   '#66bbaa'
+    },
+    stegosaurus: {
+      id:      'stegosaurus',
+      name:    'Stegosaurus stenops',
+      emoji:   '🦕',
+      cardImg: 'assets/images/stegosaurus_card.png',
+      weight:  '5–7 toneladas',
+      size:    '9 metros',
+      diet:    'Herbívoro (plantas bajas)',
+      period:  'Jurásico tardío (155–150 Ma)',
+      fact:    '¡Próximamente! Las placas del Estegosaurio servían para regular la temperatura y comunicarse con su especie.',
+      color:   '#88bb44',
+      locked:  true
+    },
+    parasaurolophus: {
+      id:      'parasaurolophus',
+      name:    'Parasaurolophus walkeri',
+      emoji:   '🦕',
+      cardImg: 'assets/images/parasaurolophus_card.png',
+      weight:  '2.5–5 toneladas',
+      size:    '9–10 metros',
+      diet:    'Herbívoro (coníferas y hojas)',
+      period:  'Cretácico tardío (76–73 Ma)',
+      fact:    '¡Próximamente! Su cresta hueca de hasta 1.8 m actuaba como un instrumento musical para comunicarse.',
+      color:   '#44aacc',
+      locked:  true
+    },
+    carnotaurus: {
+      id:      'carnotaurus',
+      name:    'Carnotaurus sastrei',
+      emoji:   '🦖',
+      cardImg: 'assets/images/carnotaurus_card.png',
+      weight:  '1.3–2.1 toneladas',
+      size:    '7–8 metros',
+      diet:    'Carnívoro (dinosaurios medianos)',
+      period:  'Cretácico tardío (70–69 Ma)',
+      fact:    '¡Próximamente! El Carnotaurus es famoso por sus cuernos de toro sobre los ojos y sus brazos extremadamente cortos, ¡más que los del T-Rex!',
+      color:   '#ff6633',
       locked:  true
     },
     brachiosaurus: {
@@ -80,9 +117,8 @@ const Collection = {
       size:    '22–26 metros',
       diet:    'Herbívoro (copas de árboles)',
       period:  'Jurásico tardío (~150 Ma)',
-      fact:    '¡Próximamente! El Braquiosaurio es el dinosaurio que guarda el laboratorio del escritorio.',
-      color:   '#cc88ff',
-      locked:  true
+      fact:    'El Braquiosaurio podía levantar su cuello hasta 13 metros de altura, como un edificio de 4 plantas, para alcanzar las hojas más altas.',
+      color:   '#cc88ff'
     }
   },
 
@@ -108,7 +144,9 @@ const Collection = {
             ? `<img src="${dino.cardImg}" class="card-dino-img" alt="${dino.name}"
                     onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
                ><span class="card-dino-emoji" style="display:none">${dino.emoji}</span>`
-            : `<span style="font-size:52px;filter:grayscale(1) brightness(0.3)">🔒</span>`
+            : `<img src="${dino.cardImg}" class="card-dino-img card-dino-locked-img" alt="bloqueado"
+                    onerror="this.outerHTML='<span style=\\'font-size:46px;opacity:.25\\'>🔒</span>'"
+               >`
           }
         </div>
         <div class="card-body">

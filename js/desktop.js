@@ -4,6 +4,16 @@
  * explorador de archivos (FileExplorer) y editor DinoWord.
  */
 
+/**
+ * Estima el tamaño en KB de un contenido de texto.
+ * Determinístico: mismo input → mismo output.
+ * Rango: 5 KB mínimo, 500 KB máximo.
+ */
+function estimateFileSize(content) {
+  if (!content) return 5;
+  return Math.min(500, Math.max(5, Math.ceil(content.length * 0.5)));
+}
+
 // ═══════════════════════════════════════════════════
 //  DESKTOP  — gestor de ventanas
 // ═══════════════════════════════════════════════════
@@ -315,6 +325,7 @@ const FileExplorer = {
           </button>
           <span class="fe-path">📁 Mis Expediciones</span>
         </div>
+        <div id="fe-storage" class="fe-storage-wrap"></div>
         <div class="fe-grid" id="fe-grid"></div>
       </div>
     `;
@@ -327,6 +338,8 @@ const FileExplorer = {
   render() {
     const grid = document.getElementById('fe-grid');
     if (!grid) return;
+
+    this._renderStorageBar();
 
     const fs = App.state.fileSystem;
     const entries = Object.entries(fs.children);
@@ -347,9 +360,13 @@ const FileExplorer = {
           <span>${name}</span>
         `;
       } else {
+        const sizeTag = item.size ? `<span class="fe-size">${item.size} KB</span>` : '';
         el.innerHTML = `
           <div class="fe-icon file-ico"></div>
-          <span>${name}</span>
+          <div class="fe-item-info">
+            <span>${name}</span>
+            ${sizeTag}
+          </div>
           <button class="fe-move-btn" onclick="FileExplorer.moveFile('${name}')">
             → Mover a carpeta
           </button>
@@ -357,6 +374,32 @@ const FileExplorer = {
       }
       grid.appendChild(el);
     });
+  },
+
+  _renderStorageBar() {
+    const bar = document.getElementById('fe-storage');
+    if (!bar) return;
+
+    const fs   = App.state.fileSystem;
+    const max  = fs.maxSpace  || 1000;
+    const used = fs.usedSpace || 0;
+    const pct  = Math.min(100, (used / max) * 100);
+    const pctStr = pct.toFixed(1);
+    const status = pct > 90 ? '⚠️ CASI LLENO'
+                 : pct > 70 ? '⚠️ Espacio limitado'
+                 : '✓ Espacio disponible';
+    const barColor = pct > 90 ? 'var(--danger)' : pct > 70 ? 'var(--amber)' : 'var(--neon)';
+
+    bar.innerHTML = `
+      <div class="storage-info">
+        <span>${used} KB / ${max} KB</span>
+        <span class="storage-pct" style="color:${barColor}">${pctStr}%</span>
+      </div>
+      <div class="storage-bar">
+        <div class="storage-used" style="width:${pctStr}%;background:${barColor}"></div>
+      </div>
+      <div class="storage-status" style="color:${barColor}">${status}</div>
+    `;
   },
 
   /** Crea la carpeta de la misión */
@@ -377,9 +420,19 @@ const FileExplorer = {
   },
 
   /** Añade un archivo guardado desde DinoWord al sistema de archivos virtual */
-  addFile(name, content) {
-    App.state.fileSystem.children[name] = { type: 'file', content };
+  addFile(name, content, size) {
+    const fileSize  = (size !== undefined) ? size : estimateFileSize(content);
+    const fs        = App.state.fileSystem;
+    const freeSpace = (fs.maxSpace || 1000) - (fs.usedSpace || 0);
+
+    if (fileSize > freeSpace) {
+      return { success: false, reason: 'storage-exceeded', needed: fileSize - freeSpace };
+    }
+
+    fs.children[name]  = { type: 'file', content, size: fileSize };
+    fs.usedSpace        = (fs.usedSpace || 0) + fileSize;
     this.render();
+    return { success: true, size: fileSize };
   },
 
   /** Mueve un archivo a la primera carpeta disponible */
@@ -488,37 +541,62 @@ const DinoWord = {
     const status     = document.getElementById('dw-status');
 
     const filename = filenameEl?.value.trim();
-    this._currentFileName = filename; // Expuesto para integration-test.js
+    this._currentFileName = filename;
     const content  = contentEl?.value.trim();
 
     if (!filename) {
       alert('📄 Escribe un nombre para el archivo antes de guardar.');
       filenameEl?.focus();
-      return;
+      return { success: false };
     }
     if (!content) {
       alert('✏️ El documento está vacío. Escribe tu informe primero.');
       contentEl?.focus();
-      return;
+      return { success: false };
     }
 
-    // Añadir al sistema de archivos virtual
-    FileExplorer.addFile(filename, content);
-    DinoLog.track('file');
+    // ── Calcular tamaño y verificar espacio ──
+    const fileSize  = estimateFileSize(content);
+    const fs        = App.state.fileSystem;
+    const freeSpace = (fs.maxSpace || 1000) - (fs.usedSpace || 0);
+
+    if (fileSize > freeSpace) {
+      const needed = fileSize - freeSpace;
+      Desktop.showGuide(`⚠️ ¡Sin espacio! Necesitas ${needed} KB más. El archivo pesa ${fileSize} KB pero solo quedan ${freeSpace} KB.`, 5000);
+      AudioEngine.play('error');
+      if (status) { status.textContent = `⚠️ Sin espacio: ${fileSize} KB necesarios, ${freeSpace} KB disponibles`; status.className = 'dw-status'; }
+      Mission.onAction('storage-exceeded', { filename, fileSize, needed });
+      return { success: false, reason: 'storage-exceeded' };
+    }
+
+    // ── Guardar ──
+    const addResult = FileExplorer.addFile(filename, content, fileSize);
+    if (!addResult.success) {
+      Desktop.showGuide(`⚠️ Error al guardar: sin espacio suficiente.`, 4000);
+      return { success: false };
+    }
+
+    DinoLog.track('file', { size: fileSize });
     AudioEngine.play('file-saved');
     Achievements.check('file-count', DinoLog.data.files);
 
+    // Logro eficiencia: 5+ archivos con total < 150 KB
+    if (DinoLog.data.files >= 5 && DinoLog.data.total_files_size <= 150) {
+      Achievements.check('file-efficiency', DinoLog.data.files);
+    }
+    // Logro almacenamiento eficiente: 95%+ usado
+    const pct = (fs.usedSpace || 0) / (fs.maxSpace || 1000);
+    if (pct >= 0.95) Achievements.check('storage-efficiency', pct);
+
     if (status) {
-      status.textContent = '💾 Guardado: ' + filename + ' ✅';
+      status.textContent = `💾 Guardado: ${filename} (${fileSize} KB) ✅`;
       status.className   = 'dw-status ok';
     }
 
     Mission.onAction('file-saved', { filename, content });
+    Desktop.showGuide(`💾 "${filename}" guardado (${fileSize} KB). Ve al Explorador y muévelo a la carpeta.`);
 
-    Desktop.showGuide(
-      '💾 Archivo "' + filename + '" guardado. ' +
-      'Ve al Explorador de Archivos y mueve el documento a la carpeta de la expedición.'
-    );
+    return { success: true, fileSize };
   }
 };
 

@@ -83,9 +83,16 @@ const Desktop = {
     const tpl = this.templates[id];
     if (!tpl) return;
 
-    // Si ya existe, enfocar
+    // Si ya existe, enfocar — y refrescar DinoWord si es necesario
     if (this.openWins[id]) {
       this.focusWindow(id);
+      // Bug fix: DinoWord abierto entre misiones no notificaba el paso
+      // ni actualizaba el texto objetivo. Se reinicializa aquí.
+      if (id === 'dinoword') {
+        DinoWord.init();
+        Mission.onAction('window-opened', { id });
+      }
+      this.closeStart();
       return;
     }
 
@@ -505,6 +512,20 @@ const DinoWord = {
     };
     this.TARGET_TEXT = m.targetText;
     this._textTyped  = false;
+
+    // Refrescar DOM — crítico cuando la ventana se reutiliza entre misiones
+    const hintEl = document.getElementById('dw-hint-text');
+    if (hintEl) hintEl.textContent = '"' + m.targetText + '"';
+
+    const fnEl = document.getElementById('dw-filename');
+    if (fnEl) fnEl.value = m.fileName;
+
+    const ta = document.getElementById('dw-content');
+    if (ta) ta.value = '';
+
+    const st = document.getElementById('dw-status');
+    if (st) { st.textContent = '✏️ Listo para escribir…'; st.className = 'dw-status'; }
+
     setTimeout(() => document.getElementById('dw-content')?.focus(), 100);
   },
 

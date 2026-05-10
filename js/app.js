@@ -118,11 +118,11 @@ const App = {
 
   closeReward() {
     document.getElementById('reward-modal').classList.add('hidden');
-    // Si hay una siguiente misión, reiniciar pasos
     if (!Mission.allComplete) {
-      Mission._completedSteps = [];
-      Mission._renderPanel();
-      Desktop.showGuide(Mission.current.intro, 9000);
+      // Resetear filesystem y reiniciar misión completa
+      App.state.fileSystem.children  = {};
+      App.state.fileSystem.usedSpace = 0;
+      Mission.init(); // resetea pasos, hadNoOverflow, maxSpace, muestra intro
     }
   },
 

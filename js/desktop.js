@@ -609,13 +609,36 @@ const DinoWord = {
     const pct = (fs.usedSpace || 0) / (fs.maxSpace || 1000);
     if (pct >= 0.95) Achievements.check('storage-efficiency', pct);
 
+    // ── Pre-check: avisar si el texto del informe no está escrito aún ──
+    if (!Mission.allComplete && !Mission._completedSteps.includes('type-text')) {
+      Desktop.showGuide('⚠️ Antes de guardar, escribe el texto del informe exactamente como aparece en la pista. ¡Mira la sugerencia azul!', 6000);
+      if (status) {
+        status.textContent = '⚠️ Escribe primero el texto del informe.';
+        status.className   = 'dw-status';
+      }
+      AudioEngine.play('error');
+      return { success: false, reason: 'type-text-incomplete' };
+    }
+
     if (status) {
       status.textContent = `💾 Guardado: ${filename} (${fileSize} KB) ✅`;
       status.className   = 'dw-status ok';
     }
 
-    Mission.onAction('file-saved', { filename, content });
-    Desktop.showGuide(`💾 "${filename}" guardado (${fileSize} KB). Ve al Explorador y muévelo a la carpeta.`);
+    // ── Notificar a la misión y mostrar resultado claramente ──
+    const missionResult = Mission.onAction('file-saved', { filename, content });
+
+    if (missionResult && missionResult.success) {
+      Desktop.showGuide(`💾 "${filename}" guardado (${fileSize} KB). Ve al Explorador y muévelo a la carpeta.`);
+    } else {
+      // El archivo se guardó en el sistema pero el paso de misión no se registró
+      const why = (missionResult && missionResult.reason) ? missionResult.reason : 'completa los pasos anteriores';
+      Desktop.showGuide(`⚠️ Archivo guardado, pero la misión requiere: ${why}`, 6000);
+      if (status) {
+        status.textContent = `⚠️ Paso de misión pendiente: ${why}`;
+        status.className   = 'dw-status';
+      }
+    }
 
     return { success: true, fileSize };
   }

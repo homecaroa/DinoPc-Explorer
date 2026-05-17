@@ -1,0 +1,146 @@
+<svg width="300" height="420" viewBox="0 0 300 420" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="0.3" y2="1">
+    <stop offset="0%" stop-color="#040810"/>
+    <stop offset="60%" stop-color="#06100c" stop-opacity="0.95"/>
+    <stop offset="100%" stop-color="#030709"/>
+  </linearGradient>
+  <linearGradient id="dg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#ff4422" stop-opacity="0.25"/>
+    <stop offset="100%" stop-color="#ff4422" stop-opacity="0.05"/>
+  </linearGradient>
+  <radialGradient id="orb" cx="50%" cy="48%" r="45%">
+    <stop offset="0%" stop-color="#ff4422" stop-opacity="0.18"/>
+    <stop offset="100%" stop-color="#ff4422" stop-opacity="0"/>
+  </radialGradient>
+  <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+    <feGaussianBlur stdDeviation="2.5" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <filter id="glow2" x="-60%" y="-60%" width="220%" height="220%">
+    <feGaussianBlur stdDeviation="5" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <clipPath id="cp"><rect width="300" height="420" rx="14"/></clipPath>
+</defs>
+
+<g clip-path="url(#cp)">
+<!-- background -->
+<rect width="300" height="420" fill="url(#bg)"/>
+
+<!-- subtle hex grid overlay -->
+<g opacity="0.055" stroke="#ff4422" stroke-width="0.6" fill="none">
+  <line x1="0" y1="0" x2="300" y2="0"/><line x1="0" y1="52" x2="300" y2="52"/><line x1="0" y1="104" x2="300" y2="104"/><line x1="0" y1="156" x2="300" y2="156"/><line x1="0" y1="208" x2="300" y2="208"/><line x1="0" y1="260" x2="300" y2="260"/><line x1="0" y1="312" x2="300" y2="312"/><line x1="0" y1="364" x2="300" y2="364"/><line x1="0" y1="416" x2="300" y2="416"/>
+  <line x1="0" y1="0" x2="0" y2="420"/><line x1="52" y1="0" x2="52" y2="420"/><line x1="104" y1="0" x2="104" y2="420"/><line x1="156" y1="0" x2="156" y2="420"/><line x1="208" y1="0" x2="208" y2="420"/><line x1="260" y1="0" x2="260" y2="420"/>
+</g>
+
+<!-- glow orb -->
+<ellipse cx="150" cy="200" rx="130" ry="110" fill="url(#orb)"/>
+
+<!-- dino area gradient fill -->
+<ellipse cx="150" cy="200" rx="115" ry="95" fill="url(#dg)" opacity="0.6"/>
+
+
+<!-- body main -->
+<path d="M 65,245 C 68,210 82,190 115,185 C 148,180 190,182 218,192
+         C 240,200 252,220 250,245 C 248,265 235,278 215,282
+         C 185,286 140,285 110,278 C 80,270 63,265 65,245 Z"
+      fill="#2a0e08" stroke="#ff4422" stroke-width="2" filter="url(#glow)"/>
+<!-- neck -->
+<path d="M 215,195 C 228,182 238,172 242,165 C 245,160 248,163 246,168
+         C 242,178 232,190 220,200 Z"
+      fill="#2a0e08" stroke="#ff4422" stroke-width="1.8" filter="url(#glow)"/>
+<!-- head (small relative to body) -->
+<ellipse cx="248" cy="158" rx="18" ry="12"
+         fill="#321008" stroke="#ff4422" stroke-width="1.8" filter="url(#glow)"/>
+<!-- snout -->
+<path d="M 260,155 C 274,152 284,153 286,157 C 287,160 283,163 275,162 L 262,160 Z"
+      fill="#280c06" stroke="#ff4422" stroke-width="1.4" filter="url(#glow)"/>
+<!-- eye -->
+<circle cx="252" cy="154" r="4.5" fill="#0a0200"/>
+<circle cx="252" cy="154" r="2.8" fill="#ff4422" opacity="0.85" filter="url(#glow)"/>
+<circle cx="253" cy="153" r="0.9" fill="white"/>
+<!-- nostril -->
+<circle cx="264" cy="158" r="1.5" fill="#ff4422" opacity="0.5"/>
+<!-- BACK PLATES - alternating two rows -->
+<g fill="#1e0804" stroke="#ff4422" stroke-width="1.5" filter="url(#glow)">
+  <!-- row 1 (larger plates) -->
+  <polygon points="120,185 113,155 127,155"/>
+  <polygon points="140,182 132,148 148,148"/>
+  <polygon points="160,181 151,145 169,145"/>
+  <polygon points="180,182 171,148 189,148"/>
+  <polygon points="200,184 192,152 208,152"/>
+  <!-- row 2 (smaller offset plates) -->
+  <polygon points="130,183 124,160 136,160" opacity="0.7"/>
+  <polygon points="150,181 144,156 156,156" opacity="0.7"/>
+  <polygon points="170,181 164,156 176,156" opacity="0.7"/>
+  <polygon points="190,183 184,158 196,158" opacity="0.7"/>
+</g>
+<!-- front legs -->
+<rect x="98" y="278" width="20" height="52" rx="6" fill="#250c06" stroke="#ff4422" stroke-width="1.5"/>
+<rect x="128" y="280" width="20" height="50" rx="6" fill="#250c06" stroke="#ff4422" stroke-width="1.5"/>
+<!-- hind legs (bigger) -->
+<rect x="170" y="275" width="24" height="58" rx="7" fill="#250c06" stroke="#ff4422" stroke-width="1.5"/>
+<rect x="202" y="275" width="24" height="58" rx="7" fill="#250c06" stroke="#ff4422" stroke-width="1.5"/>
+<!-- feet -->
+<ellipse cx="108" cy="330" rx="13" ry="5" fill="#1e0804" stroke="#ff4422" stroke-width="1.2"/>
+<ellipse cx="138" cy="330" rx="13" ry="5" fill="#1e0804" stroke="#ff4422" stroke-width="1.2"/>
+<ellipse cx="182" cy="333" rx="15" ry="6" fill="#1e0804" stroke="#ff4422" stroke-width="1.2"/>
+<ellipse cx="214" cy="333" rx="15" ry="6" fill="#1e0804" stroke="#ff4422" stroke-width="1.2"/>
+<!-- tail with thagomizer spikes -->
+<path d="M 66,246 C 55,248 38,245 24,240 C 18,238 16,244 20,246 C 32,252 50,254 64,252 Z"
+      fill="#250c06" stroke="#ff4422" stroke-width="1.8" filter="url(#glow)"/>
+<!-- thagomizer spikes (4 tail spikes) -->
+<polygon points="24,241 12,228 20,241" fill="#1e0804" stroke="#ff4422" stroke-width="1.4" filter="url(#glow)"/>
+<polygon points="19,243 5,233 17,244" fill="#1e0804" stroke="#ff4422" stroke-width="1.4" filter="url(#glow)"/>
+<polygon points="20,246 6,238 18,248" fill="#1e0804" stroke="#ff4422" stroke-width="1.4" filter="url(#glow)"/>
+<polygon points="22,249 9,244 21,252" fill="#1e0804" stroke="#ff4422" stroke-width="1.2" filter="url(#glow)" opacity="0.8"/>
+
+
+
+<!-- shield decoration -->
+<g opacity="0.14" stroke="#ff4422" fill="none" stroke-width="0.8">
+  <polygon points="150,306 138,316 140,330 150,336 160,330 162,316"/>
+  <polygon points="150,311 141,318 143,328 150,332 157,328 159,318" opacity="0.5"/>
+</g>
+
+
+<!-- outer border glow -->
+<rect width="298" height="418" x="1" y="1" rx="13" fill="none"
+      stroke="#ff4422" stroke-width="2.5" opacity="0.85" filter="url(#glow)"/>
+<!-- inner border thin -->
+<rect width="290" height="410" x="5" y="5" rx="10" fill="none"
+      stroke="#ff4422" stroke-width="0.6" opacity="0.25"/>
+
+<!-- mission badge top-right -->
+<rect x="220" y="12" width="68" height="26" rx="7"
+      fill="#ff4422" fill-opacity="0.18" stroke="#ff4422" stroke-width="1.2" filter="url(#glow)"/>
+<text x="254" y="29" fill="#ff4422" font-size="12" font-family="'Courier New',monospace"
+      text-anchor="middle" font-weight="bold">M.08</text>
+
+<!-- feature badge top-left -->
+<rect x="12" y="12" width="72" height="26" rx="7"
+      fill="#ff4422" fill-opacity="0.12" stroke="#ff4422" stroke-width="1"/>
+<text x="48" y="29" fill="#ff4422" font-size="10" font-family="'Courier New',monospace"
+      text-anchor="middle">🛡️ SEC</text>
+
+<!-- corner brackets -->
+<path d="M13,42 L13,14 L41,14" fill="none" stroke="#ff4422" stroke-width="1.8" opacity="0.55"/>
+<path d="M287,42 L287,14 L259,14" fill="none" stroke="#ff4422" stroke-width="1.8" opacity="0.55"/>
+<path d="M13,378 L13,406 L41,406" fill="none" stroke="#ff4422" stroke-width="1.8" opacity="0.55"/>
+<path d="M287,378 L287,406 L259,406" fill="none" stroke="#ff4422" stroke-width="1.8" opacity="0.55"/>
+
+<!-- rarity dots -->
+<g fill="#ff4422" opacity="0.7">
+<circle cx="122" cy="350" r="4"/><circle cx="137" cy="350" r="4"/><circle cx="152" cy="350" r="4"/><circle cx="167" cy="350" r="4"/>
+</g>
+
+<!-- bottom name plate -->
+<rect x="10" y="362" width="280" height="46" rx="9"
+      fill="#ff4422" fill-opacity="0.13" stroke="#ff4422" stroke-width="1.2"/>
+<text x="150" y="378" fill="#ff4422" font-size="9" font-family="'Courier New',monospace"
+      text-anchor="middle" opacity="0.75" letter-spacing="2">JURÁSICO TARDÍO</text>
+<text x="150" y="398" fill="white" font-size="17" font-family="'Courier New',monospace"
+      text-anchor="middle" font-weight="bold" letter-spacing="1">ESTEGOSAURIO</text>
+</g>
+</svg>

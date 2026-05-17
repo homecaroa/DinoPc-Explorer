@@ -112,6 +112,61 @@ const Achievements = {
       icon: '🎯', title: 'Nunca Lleno',
       description: 'Completa una misión sin exceder el límite de espacio',
       category: 'files', trigger: 'mission-complete-no-overflow', goal: 1
+    },
+    // ── Logros Nivel Avanzado ──
+    {
+      id: 'network-pioneer',
+      icon: '🌐', title: 'Pionero de Redes',
+      description: 'Envía un archivo exitosamente por la red',
+      category: 'missions', trigger: 'file-sent', goal: 1
+    },
+    {
+      id: 'network-master',
+      icon: '🔗', title: 'Maestro de Redes',
+      description: 'Envía 5 archivos por red sin errores',
+      category: 'missions', trigger: 'network-master', goal: 5
+    },
+    {
+      id: 'security-guardian',
+      icon: '🛡️', title: 'Guardián de Seguridad',
+      description: 'Elimina todas las amenazas en un escaneo antivirus',
+      category: 'missions', trigger: 'virus-all-removed', goal: 1
+    },
+    {
+      id: 'clean-system',
+      icon: '✨', title: 'Sistema Limpio',
+      description: 'Realiza 3 escaneos sin encontrar ningún virus',
+      category: 'missions', trigger: 'clean-scan-count', goal: 3
+    },
+    {
+      id: 'compression-master',
+      icon: '📦', title: 'Maestro de Compresión',
+      description: 'Comprime archivos a ratio 3:1 o mejor',
+      category: 'missions', trigger: 'compression-ratio', goal: 3
+    },
+    {
+      id: 'space-saver',
+      icon: '💡', title: 'Ahorrador de Espacio',
+      description: 'Libera 100+ KB comprimiendo datos',
+      category: 'missions', trigger: 'space-saver', goal: 100
+    },
+    {
+      id: 'encryption-master',
+      icon: '🔐', title: 'Maestro de Criptografía',
+      description: 'Encripta un archivo y establece sus permisos',
+      category: 'missions', trigger: 'file-encrypted-success', goal: 1
+    },
+    {
+      id: 'security-expert',
+      icon: '🔒', title: 'Experto en Seguridad',
+      description: 'Completa las misiones de AntiVirus y Encriptación',
+      category: 'missions', trigger: 'security-expert', goal: 2
+    },
+    {
+      id: 'all-master',
+      icon: '👑', title: 'Gran Maestro Dinosaurio',
+      description: 'Desbloquea todos los dinosaurios desbloqueables',
+      category: 'missions', trigger: 'all-dinos-unlocked', goal: 10
     }
   ],
 

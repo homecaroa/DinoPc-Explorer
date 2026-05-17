@@ -86,33 +86,33 @@ const Quiz = {
     ],
 
     stegosaurus: [
-      { type:'math', operation:'multiplication',
-        q:'El Stegosaurus tiene 4 filas de archivos. En cada fila hay 7 archivos. ¿Total?',
-        opts:['28','24','32','20'], ans:0, hint:'4 × 7 = ?',
-        fact:'¡Correcto! 4 × 7 = 28. Organizar en filas y columnas es una estructura de datos muy usada en informática.' },
       { type:'concept',
-        q:'¿Qué es una extensión de archivo (como .doc o .png)?',
-        opts:['Indica el tipo y formato del archivo','El tamaño del archivo','El nombre del autor','La fecha de creación'], ans:0,
-        fact:'La extensión ayuda al sistema operativo a saber con qué programa abrir el archivo. ¡.doc para Word, .png para imágenes!' },
+        q:'¿Qué es un virus informático?',
+        opts:['Software dañino que infecta y copia archivos','Un archivo de texto dañado','Una carpeta bloqueada','Un tipo de conexión de red'], ans:0,
+        fact:'Un virus informático se copia a sí mismo y puede dañar archivos o el sistema. ¡El Estegosaurio con sus placas protectoras nos protege!' },
       { type:'math', operation:'subtraction',
-        q:'Tenías 200 KB libres. Guardaste un archivo de 45 KB y otro de 30 KB. ¿Cuánto queda?',
-        opts:['130 KB','125 KB','120 KB','115 KB'], ans:1, hint:'200 − 45 − 30 = ?',
-        fact:'¡Exacto! 200 − 45 − 30 = 125 KB. Restar uno a uno es lo que hace el sistema operativo cuando guardas archivos.' }
+        q:'Tienes 10 archivos. El antivirus detecta que 3 están infectados. ¿Cuántos son seguros?',
+        opts:['5','7','8','6'], ans:1, hint:'10 − 3 = ?',
+        fact:'¡Exacto! 10 − 3 = 7 archivos seguros. El antivirus elimina las amenazas y protege el resto de tu sistema.' },
+      { type:'concept',
+        q:'¿Qué hace la "cuarentena" en un programa antivirus?',
+        opts:['Aísla el archivo sospechoso sin eliminarlo','Lo borra permanentemente','Lo copia a otro equipo','No hace nada'], ans:0,
+        fact:'La cuarentena aisla el archivo sospechoso para que no infecte otros. Es como un hospital para archivos enfermos: separados pero no borrados.' }
     ],
 
     parasaurolophus: [
-      { type:'math', operation:'multiplication',
-        q:'Parasaurolophus guardó 3 archivos que pesan 7 KB cada uno. ¿Cuántos KB en total?',
-        opts:['10','21','18','14'], ans:1, hint:'3 × 7 = ?',
-        fact:'¡Perfecto! 3 × 7 = 21 KB. Calcular el tamaño total antes de guardar evita sorpresas.' },
       { type:'concept',
-        q:'¿Qué permite hacer el "Explorador de Archivos"?',
-        opts:['Ver, mover, copiar y organizar archivos y carpetas','Solo ver archivos de texto','Crear programas','Conectarse a internet'], ans:0,
-        fact:'El Explorador de Archivos es como el mapa del sistema: te muestra toda la estructura de carpetas y archivos.' },
-      { type:'math', operation:'addition',
-        q:'Descargaste 3 archivos: 12 KB, 8 KB y 15 KB. ¿Cuántos KB en total?',
-        opts:['33','35','38','30'], ans:1, hint:'12 + 8 + 15 = ?',
-        fact:'¡Correcto! 12 + 8 + 15 = 35 KB. Sumar tamaños te dice cuánto espacio necesitas antes de descargar.' }
+        q:'¿Qué significa comprimir un archivo?',
+        opts:['Reducir su tamaño sin perder datos importantes','Eliminar partes del archivo','Crear varias copias del archivo','Moverlo a otra carpeta'], ans:0,
+        fact:'La compresión usa algoritmos matemáticos para almacenar los mismos datos ocupando menos espacio. ¡Parasaurolofus optimiza todo!' },
+      { type:'math', operation:'division',
+        q:'Un archivo ocupa 200 KB. Después de comprimirlo ocupa 50 KB. ¿Cuál es el ratio de compresión?',
+        opts:['2:1','3:1','4:1','5:1'], ans:2, hint:'200 ÷ 50 = ?',
+        fact:'¡Correcto! 200 ÷ 50 = 4. Un ratio 4:1 significa que el archivo comprimido es 4 veces más pequeño. ¡Parasaurolofus es eficientísimo!' },
+      { type:'concept',
+        q:'¿Qué extensión tienen normalmente los archivos comprimidos?',
+        opts:['.zip o .rar','.txt o .doc','.png o .jpg','.exe o .bat'], ans:0,
+        fact:'.zip es el formato de compresión más usado en el mundo. .rar es otra alternativa. Ambos reducen el tamaño sin perder datos.' }
     ],
 
     carnotaurus: [
@@ -143,6 +143,38 @@ const Quiz = {
         q:'Tienes 6 carpetas principales. Cada una tiene 10 subcarpetas. ¿Total de subcarpetas?',
         opts:['16','60','50','70'], ans:1, hint:'6 × 10 = ?',
         fact:'¡Exacto! 6 × 10 = 60. Una jerarquía de carpetas bien organizada hace los sistemas escalables.' }
+    ],
+
+    // ── BANCOS AVANZADOS ───────────────────────────────
+
+    pteranodon: [
+      { type:'math', operation:'division',
+        q:'Envías un archivo de 150 KB a 50 KB/s. ¿Cuántos segundos tarda la transferencia?',
+        opts:['2 seg','3 seg','4 seg','5 seg'], ans:1, hint:'150 ÷ 50 = ?',
+        fact:'¡Correcto! 150 ÷ 50 = 3 segundos. La velocidad de red se mide en KB/s o MB/s para calcular tiempos de transferencia.' },
+      { type:'concept',
+        q:'¿Qué permite hacer una red de ordenadores?',
+        opts:['Compartir archivos e información entre máquinas','Solo crear carpetas','Solo ver imágenes','Nada que no puedas hacer solo'], ans:0,
+        fact:'Una red conecta ordenadores para compartir recursos. ¡Como el Pteranodón volando mensajes entre dinosaurios!' },
+      { type:'concept',
+        q:'¿Qué es un protocolo de red?',
+        opts:['Reglas que permiten la comunicación entre dispositivos','Un tipo de archivo especial','Un virus informático','Una carpeta de red'], ans:0,
+        fact:'Los protocolos son las "reglas del idioma" de la red. Sin ellos, los ordenadores no podrían entenderse.' }
+    ],
+
+    iguanodon: [
+      { type:'concept',
+        q:'¿Qué es la encriptación de datos?',
+        opts:['Convertir información en un código secreto ilegible sin clave','Crear una copia de seguridad','Comprimir un archivo','Mover archivos a una carpeta'], ans:0,
+        fact:'La encriptación convierte texto normal en código secreto. Solo quien tiene la "llave" puede leerlo.' },
+      { type:'math', operation:'division',
+        q:'Tienes 5 archivos: 3 privados y 2 públicos. ¿Qué porcentaje son privados?',
+        opts:['40%','60%','50%','80%'], ans:1, hint:'(3 ÷ 5) × 100 = ?',
+        fact:'¡Exacto! (3/5) × 100 = 60%. Calcular porcentajes ayuda a gestionar permisos y políticas de seguridad.' },
+      { type:'concept',
+        q:'¿Qué significa "R W X" en los permisos de un archivo?',
+        opts:['Lectura, Escritura, Ejecución','Red, Wifi, Extra','Rápido, Wip, Xifrex','Nada especial'], ans:0,
+        fact:'R = Read (leer), W = Write (escribir), X = eXecute (ejecutar). Son los tres permisos básicos de cualquier sistema de archivos.' }
     ]
 
   }, // fin BANKS

@@ -16,6 +16,7 @@ const Mission = {
       targetText: 'El Spinosaurio encontró peces gigantes en el río.',
       fileName:   'informe_spino.doc',
       maxSpace:   500,
+      steps: ['create-folder','open-dinoword','type-text','save-file','move-file'],
       intro: '¡Bienvenido al laboratorio! 🦕 Tu primera misión: documenta al Spinosaurio, el mayor carnívoro que existió. Empieza creando una carpeta en "Mis Expediciones".'
     },
     {
@@ -25,6 +26,7 @@ const Mission = {
       targetText: 'El Tiranosaurio Rex fue el depredador más temido del Cretácico tardío.',
       fileName:   'informe_trex.doc',
       maxSpace:   350,
+      steps: ['create-folder','open-dinoword','type-text','save-file','move-file'],
       intro: '¡Increíble trabajo! 🦖 Ahora estudiaremos al legendario T-Rex. Crea una nueva carpeta y redacta su informe científico en DinoWord.'
     },
     {
@@ -34,6 +36,7 @@ const Mission = {
       targetText: 'El Triceratops usaba sus tres cuernos para defenderse de los depredadores.',
       fileName:   'informe_triceratops.doc',
       maxSpace:   250,
+      steps: ['create-folder','open-dinoword','type-text','save-file','move-file'],
       intro: '¡Genial! 🦏 Ahora el Triceratops. Era el herbívoro con armadura más famoso del Cretácico tardío. ¡Crea su expedición!'
     },
     {
@@ -43,6 +46,7 @@ const Mission = {
       targetText: 'El Velociraptor cazaba en equipo y tenía plumas como un pájaro moderno.',
       fileName:   'informe_veloci.doc',
       maxSpace:   200,
+      steps: ['create-folder','open-dinoword','type-text','save-file','move-file'],
       intro: '¡Cuarta misión! 🦎 El Velociraptor nos desafía. ¿Sabías que tenía plumas y era del tamaño de un pavo? ¡Solo tienes 200 KB de espacio!'
     },
     {
@@ -52,6 +56,7 @@ const Mission = {
       targetText: 'El Ankylosaurus tenía una armadura ósea completa y una cola en forma de maza.',
       fileName:   'informe_ankylo.doc',
       maxSpace:   170,
+      steps: ['create-folder','open-dinoword','type-text','save-file','move-file'],
       intro: '¡Quinta misión! 🐢 El Ankylosaurus, el tanque del Cretácico. Con 170 KB disponibles tendrás que ser muy eficiente. ¡A por ello!'
     },
     {
@@ -61,18 +66,70 @@ const Mission = {
       targetText: 'El Braquiosaurio era uno de los dinosaurios más grandes que jamás caminaron por la Tierra.',
       fileName:   'informe_brachio.doc',
       maxSpace:   140,
-      intro: '🏆 ¡MISIÓN FINAL! 🦒 El Braquiosaurio, el gigante del Jurásico. Con solo 140 KB de espacio, demuestra todo lo aprendido. ¡Eres un auténtico paleontólogo!'
+      steps: ['create-folder','open-dinoword','type-text','save-file','move-file'],
+      intro: '🏆 ¡Misión 6! 🦒 El Braquiosaurio, el gigante del Jurásico. Con solo 140 KB de espacio, ¡demuestra todo lo aprendido!'
+    },
+
+    // ── NIVEL AVANZADO ────────────────────────────────
+    {
+      id: 'pteranodon', num: 7,
+      title: 'Expedición Pteranodón', dino: 'pteranodon',
+      folderName: 'red_datos',
+      targetText: 'La comunicación es clave para trabajar en red.',
+      fileName:   'mensaje_red.txt',
+      maxSpace:   300,
+      feature:    'network',
+      steps: ['create-folder','open-dinoword','type-text','save-file','send-file'],
+      intro: '🌐 ¡Misión 7! El Pteranodón te enseña redes. Escribe el mensaje, guárdalo y ¡envíalo con DinoNetwork!'
+    },
+    {
+      id: 'stegosaurus', num: 8,
+      title: 'Expedición Estegosaurio', dino: 'stegosaurus',
+      folderName: 'seguridad',
+      targetText: 'La protección de datos es una responsabilidad.',
+      fileName:   'protocolo_defensa.txt',
+      maxSpace:   250,
+      feature:    'antivirus',
+      steps: ['create-folder','open-dinoword','type-text','save-file','scan-virus'],
+      intro: '🛡️ ¡Misión 8! El Estegosaurio protege tus archivos. Guarda el protocolo y escanea con AntiVirus Guardian.'
+    },
+    {
+      id: 'parasaurolophus', num: 9,
+      title: 'Expedición Parasaurolofus', dino: 'parasaurolophus',
+      folderName: 'compresion',
+      targetText: 'Comprimir datos ahorra espacio sin perder información.',
+      fileName:   'datos_optimizados.txt',
+      maxSpace:   400,
+      feature:    'compression',
+      steps: ['create-folder','open-dinoword','type-text','save-file','compress-files'],
+      intro: '📦 ¡Misión 9! El Parasaurolofus optimiza datos. Guarda el informe y comprime con DinoCompressor.'
+    },
+    {
+      id: 'iguanodon', num: 10,
+      title: 'Expedición Iguanodón', dino: 'iguanodon',
+      folderName: 'seguridad_avanzada',
+      targetText: 'La encriptación protege tus datos privados.',
+      fileName:   'archivo_secreto.txt',
+      maxSpace:   200,
+      feature:    'encryption',
+      steps: ['create-folder','open-dinoword','type-text','save-file','encrypt-file'],
+      intro: '🔐 ¡MISIÓN FINAL! Iguanodón, maestro de los secretos. Encripta tu archivo con DinoEncrypt y ¡conviértete en experto!'
     }
   ],
 
   // ─── Pasos con cadena de requisitos ──────────────
 
   STEPS: {
-    'create-folder': { label: '📁 Crear carpeta',   requires: null,            action: 'folder-created' },
-    'open-dinoword': { label: '📝 Abrir DinoWord',   requires: 'create-folder', action: 'window-opened'  },
-    'type-text':     { label: '⌨️ Escribir texto',   requires: 'open-dinoword', action: 'text-typed'     },
-    'save-file':     { label: '💾 Guardar archivo',  requires: 'type-text',     action: 'file-saved'     },
-    'move-file':     { label: '🚚 Mover archivo',    requires: 'save-file',     action: 'file-moved'     }
+    'create-folder': { label: '📁 Crear carpeta',      requires: null,            action: 'folder-created'   },
+    'open-dinoword': { label: '📝 Abrir DinoWord',      requires: 'create-folder', action: 'window-opened'    },
+    'type-text':     { label: '⌨️ Escribir texto',      requires: 'open-dinoword', action: 'text-typed'       },
+    'save-file':     { label: '💾 Guardar archivo',     requires: 'type-text',     action: 'file-saved'       },
+    'move-file':     { label: '🚚 Mover archivo',       requires: 'save-file',     action: 'file-moved'       },
+    // ── Pasos avanzados (misiones 7-10) ──
+    'send-file':      { label: '🌐 Enviar por red',     requires: 'save-file',     action: 'file-sent'        },
+    'scan-virus':     { label: '🛡️ Escanear virus',     requires: 'save-file',     action: 'virus-scanned'    },
+    'compress-files': { label: '📦 Comprimir archivos', requires: 'save-file',     action: 'files-compressed' },
+    'encrypt-file':   { label: '🔐 Encriptar archivo',  requires: 'save-file',     action: 'file-encrypted'   }
   },
 
   _completedSteps: [],
@@ -97,7 +154,8 @@ const Mission = {
 
   /** Primer paso aún no completado, o null si todos hechos */
   getNextStep() {
-    return Object.keys(this.STEPS).find(id => !this._completedSteps.includes(id)) || null;
+    const steps = this.current.steps || Object.keys(this.STEPS).slice(0, 5);
+    return steps.find(id => !this._completedSteps.includes(id)) || null;
   },
 
   /**
@@ -197,7 +255,7 @@ const Mission = {
     DinoLog.track('step');
     AudioEngine.play('success');
 
-    if (this._completedSteps.length === Object.keys(this.STEPS).length) {
+    if (this._completedSteps.length === (this.current.steps || Object.keys(this.STEPS).slice(0,5)).length) {
       setTimeout(() => Mission._onMissionComplete(), 800);
     }
   },
@@ -255,9 +313,11 @@ const Mission = {
 
     const nextStep = this.getNextStep();
 
-    // Lista de pasos con clases semánticas
+    const missionSteps = this.current.steps || Object.keys(this.STEPS).slice(0, 5);
     const stepsHTML = '<div class="steps-list">' +
-      Object.entries(this.STEPS).map(([id, step]) => {
+      missionSteps.map(id => {
+        const step   = this.STEPS[id];
+        if (!step) return '';
         const done   = this._completedSteps.includes(id);
         const isNext = id === nextStep;
         const cls    = done ? 'step step-done'

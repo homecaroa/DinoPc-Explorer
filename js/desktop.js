@@ -30,7 +30,11 @@ const Desktop = {
     'quiz':          { title: '🧠 DinoQuiz',                      w: 500, h: 430, init: () => Quiz.init()         },
     'settings':      { title: '⚙️ Configuración del Laboratorio', w: 430, h: 330, init: () => Settings.init()     },
     'dinoLog':       { title: '📊 Diario DinoPC',                 w: 450, h: 410, init: null                      },
-    'trash':         { title: '🗑️ Papelera de Reciclaje',         w: 340, h: 220, init: null                      }
+    'trash':         { title: '🗑️ Papelera de Reciclaje',         w: 340, h: 220, init: null                      },
+    'network':    { title: '🌐 DinoNetwork',        w: 420, h: 380, init: () => Network.init()    },
+    'antivirus':  { title: '🛡️ AntiVirus Guardian', w: 420, h: 400, init: () => AntiVirus.init()  },
+    'compressor': { title: '📦 DinoCompressor',      w: 430, h: 420, init: () => Compressor.init() },
+    'encryption': { title: '🔐 DinoEncrypt',         w: 420, h: 450, init: () => Encryption.init() }
   },
 
   /** Contenido HTML de cada ventana */
@@ -43,6 +47,10 @@ const Desktop = {
       case 'settings':      return Settings.buildHTML();
       case 'dinoLog':       return DinoLog.buildHTML();
       case 'trash':         return `<div class="trash-empty"><span>🗑️</span><p>La papelera está vacía</p></div>`;
+      case 'network':       return Network.buildHTML();
+      case 'antivirus':     return AntiVirus.buildHTML();
+      case 'compressor':    return Compressor.buildHTML();
+      case 'encryption':    return Encryption.buildHTML();
       default:              return '<p style="padding:20px;color:var(--txt-dim)">Sin contenido</p>';
     }
   },

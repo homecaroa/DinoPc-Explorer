@@ -110,6 +110,8 @@ const App = {
       this.state.unlockedDinos.push(dinoId);
       localStorage.setItem('dinopc_unlocked', JSON.stringify(this.state.unlockedDinos));
       Achievements.check('dino-unlock', this.state.unlockedDinos.length);
+      // Logro final: todos los dinos desbloqueables
+      Achievements.check('all-dinos-unlocked', this.state.unlockedDinos.length);
     }
 
     this._renderReward(dino);

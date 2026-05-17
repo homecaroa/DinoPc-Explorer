@@ -78,9 +78,8 @@ const Collection = {
       size:    '9 metros',
       diet:    'Herbívoro (plantas bajas)',
       period:  'Jurásico tardío (155–150 Ma)',
-      fact:    '¡Próximamente! Las placas del Estegosaurio servían para regular la temperatura y comunicarse con su especie.',
-      color:   '#88bb44',
-      locked:  true
+      fact:    'Las placas del Estegosaurio servían para regular la temperatura y posiblemente para comunicarse con su especie mediante cambios de color.',
+      color:   '#88bb44'
     },
     parasaurolophus: {
       id:      'parasaurolophus',
@@ -91,9 +90,8 @@ const Collection = {
       size:    '9–10 metros',
       diet:    'Herbívoro (coníferas y hojas)',
       period:  'Cretácico tardío (76–73 Ma)',
-      fact:    '¡Próximamente! Su cresta hueca de hasta 1.8 m actuaba como un instrumento musical para comunicarse.',
-      color:   '#44aacc',
-      locked:  true
+      fact:    'Su cresta hueca de hasta 1.8 m actuaba como un instrumento musical para comunicarse. ¡El dino con megáfono natural del Cretácico!',
+      color:   '#44aacc'
     },
     carnotaurus: {
       id:      'carnotaurus',
@@ -119,6 +117,30 @@ const Collection = {
       period:  'Jurásico tardío (~150 Ma)',
       fact:    'El Braquiosaurio podía levantar su cuello hasta 13 metros de altura, como un edificio de 4 plantas, para alcanzar las hojas más altas.',
       color:   '#cc88ff'
+    },
+    pteranodon: {
+      id:      'pteranodon',
+      name:    'Pteranodon longiceps',
+      emoji:   '🦅',
+      cardImg: 'assets/images/pteranodon_card.png',
+      weight:  '20–30 kilogramos',
+      size:    '5–6 m de envergadura',
+      diet:    'Piscívoro (peces)',
+      period:  'Cretácico tardío (86–84 Ma)',
+      fact:    'El Pteranodón no era un dinosaurio sino un reptil volador. Podía planear cientos de km sin aletear, como los datos viajando por la red.',
+      color:   '#44ccff'
+    },
+    iguanodon: {
+      id:      'iguanodon',
+      name:    'Iguanodon bernissartensis',
+      emoji:   '🦎',
+      cardImg: 'assets/images/iguanodon_card.svg',
+      weight:  '3–4.5 toneladas',
+      size:    '10 metros',
+      diet:    'Herbívoro (plantas y frutos)',
+      period:  'Cretácico temprano (126–125 Ma)',
+      fact:    'El Iguanodón fue uno de los primeros dinosaurios identificados por la ciencia (1822). Sus pulgares en forma de espiga se usaban como herramienta.',
+      color:   '#aadd66'
     }
   },
 

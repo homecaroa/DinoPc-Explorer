@@ -24,7 +24,15 @@ const AudioEngine = {
     'mission-complete': { freq: 523,  duration: 0.90, pattern: 'arpeggio', type: 'sine',     volume: 0.28 },
     'coin':             { freq: 1050, duration: 0.18, pattern: 'ding',     type: 'sine',     volume: 0.22 },
     'math-success':     { freq: 1200, duration: 0.28, pattern: 'arpeggio', type: 'sine',     volume: 0.22 },
-    'math-error':       { freq: 180,  duration: 0.55, pattern: 'beepdown', type: 'square',   volume: 0.15 }
+    'math-error':       { freq: 180,  duration: 0.55, pattern: 'beepdown', type: 'square',   volume: 0.15 },
+    'network-transfer': { freq: 660,  duration: 0.20, pattern: 'click',    type: 'sine',     volume: 0.18 },
+    'scan-complete':    { freq: 950,  duration: 0.35, pattern: 'beepup',   type: 'sine',     volume: 0.20 },
+    'compress-success': { freq: 740,  duration: 0.40, pattern: 'beepup',   type: 'triangle', volume: 0.20 },
+    'encrypt-success':  { freq: 520,  duration: 0.45, pattern: 'arpeggio', type: 'sine',     volume: 0.22 },
+    'network-transfer': { freq: 880,  duration: 0.40, pattern: 'arpeggio', type: 'sine',     volume: 0.18 },
+    'scan-complete':    { freq: 660,  duration: 0.35, pattern: 'beepup',   type: 'sine',     volume: 0.20 },
+    'compress-success': { freq: 1000, duration: 0.30, pattern: 'arpeggio', type: 'sine',     volume: 0.20 },
+    'encrypt-success':  { freq: 400,  duration: 0.70, pattern: 'beepup',   type: 'square',   volume: 0.18 }
   },
 
   // ═══════════════════════════════════════════

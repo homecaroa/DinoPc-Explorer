@@ -3,6 +3,14 @@
  * Estado global, transiciones de pantalla, settings y recompensas.
  */
 
+// Suprimir error de extensiones del navegador (no es un bug del juego)
+window.addEventListener('unhandledrejection', function(e) {
+  if (e.reason && e.reason.message &&
+      e.reason.message.includes('message channel closed')) {
+    e.preventDefault();
+  }
+});
+
 const App = {
 
   state: {

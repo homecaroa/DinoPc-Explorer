@@ -383,8 +383,10 @@ const FileExplorer = {
             ${sizeTag}
           </div>
           <button class="fe-move-btn" onclick="FileExplorer.moveFile('${name}')">
-            → Mover a carpeta
+            → Mover
           </button>
+          <button class="fe-del-btn" onclick="FileExplorer.deleteFile('${name}')"
+                  title="Eliminar archivo">🗑️</button>
         `;
       }
       grid.appendChild(el);
@@ -434,12 +436,17 @@ const FileExplorer = {
     Desktop.showGuide('✅ ¡Carpeta "' + name + '" creada! Ahora abre DinoWord y escribe el informe.');
   },
 
-  /** Añade un archivo guardado desde DinoWord al sistema de archivos virtual */
+  /** Añade o sobreescribe un archivo. Si ya existe, descuenta su tamaño anterior. */
   addFile(name, content, size) {
     const fileSize  = (size !== undefined) ? size : estimateFileSize(content);
     const fs        = App.state.fileSystem;
-    const freeSpace = (fs.maxSpace || 1000) - (fs.usedSpace || 0);
 
+    // Si el archivo ya existe, liberar su espacio antes de reescribir
+    if (fs.children[name] && fs.children[name].type === 'file') {
+      fs.usedSpace = Math.max(0, (fs.usedSpace || 0) - (fs.children[name].size || 0));
+    }
+
+    const freeSpace = (fs.maxSpace || 1000) - (fs.usedSpace || 0);
     if (fileSize > freeSpace) {
       return { success: false, reason: 'storage-exceeded', needed: fileSize - freeSpace };
     }
@@ -451,7 +458,16 @@ const FileExplorer = {
   },
 
   /** Mueve un archivo a la primera carpeta disponible */
-  moveFile(filename) {
+  deleteFile(name) {
+    const fs   = App.state.fileSystem;
+    const file = fs.children[name];
+    if (!file) return;
+    fs.usedSpace = Math.max(0, (fs.usedSpace || 0) - (file.size || 0));
+    delete fs.children[name];
+    AudioEngine.play('click');
+    this.render();
+    Desktop.showGuide(`🗑️ "${name}" eliminado. Espacio liberado.`, 3000);
+  },
     // Validar que el paso previo esté completado antes de mover
     const check = Mission.canDoStep('move-file');
     if (!check.allowed) {

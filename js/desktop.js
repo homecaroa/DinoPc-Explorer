@@ -468,6 +468,8 @@ const FileExplorer = {
     this.render();
     Desktop.showGuide(`🗑️ "${name}" eliminado. Espacio liberado.`, 3000);
   },
+
+  moveFile(filename) {
     // Validar que el paso previo esté completado antes de mover
     const check = Mission.canDoStep('move-file');
     if (!check.allowed) {

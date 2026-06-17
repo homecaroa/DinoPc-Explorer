@@ -1,0 +1,52 @@
+<svg width="300" height="420" viewBox="0 0 300 420" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="0.3" y2="1">
+    <stop offset="0%" stop-color="#040810"/><stop offset="60%" stop-color="#06100c" stop-opacity="0.95"/>
+    <stop offset="100%" stop-color="#030709"/>
+  </linearGradient>
+  <radialGradient id="orb" cx="50%" cy="48%" r="45%">
+    <stop offset="0%" stop-color="#00cc88" stop-opacity="0.18"/><stop offset="100%" stop-color="#00cc88" stop-opacity="0"/>
+  </radialGradient>
+  <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+    <feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <clipPath id="cp"><rect width="300" height="420" rx="14"/></clipPath>
+</defs>
+<g clip-path="url(#cp)">
+<rect width="300" height="420" fill="url(#bg)"/>
+<g opacity="0.05" stroke="#00cc88" stroke-width="0.6" fill="none">
+  <line x1="0" y1="0" x2="300" y2="0"/><line x1="0" y1="52" x2="300" y2="52"/><line x1="0" y1="104" x2="300" y2="104"/><line x1="0" y1="156" x2="300" y2="156"/><line x1="0" y1="208" x2="300" y2="208"/><line x1="0" y1="260" x2="300" y2="260"/><line x1="0" y1="312" x2="300" y2="312"/><line x1="0" y1="364" x2="300" y2="364"/><line x1="0" y1="416" x2="300" y2="416"/>
+  <line x1="0" y1="0" x2="0" y2="420"/><line x1="52" y1="0" x2="52" y2="420"/><line x1="104" y1="0" x2="104" y2="420"/><line x1="156" y1="0" x2="156" y2="420"/><line x1="208" y1="0" x2="208" y2="420"/><line x1="260" y1="0" x2="260" y2="420"/>
+</g>
+<ellipse cx="150" cy="190" rx="130" ry="110" fill="url(#orb)"/>
+
+<rect x="105" y="160" width="90" height="80" rx="10" fill="#0a1a14" stroke="#00cc88" stroke-width="2" filter="url(#glow)"/>
+<rect x="120" y="125" width="60" height="42" rx="8" fill="#0e2018" stroke="#00cc88" stroke-width="2" filter="url(#glow)"/>
+<circle cx="138" cy="146" r="7" fill="#040c08"/><circle cx="138" cy="146" r="4" fill="#00cc88" opacity="0.9" filter="url(#glow)"/>
+<circle cx="162" cy="146" r="7" fill="#040c08"/><circle cx="162" cy="146" r="4" fill="#00cc88" opacity="0.9" filter="url(#glow)"/>
+<rect x="60" y="175" width="42" height="14" rx="4" fill="#0a1a14" stroke="#00cc88" stroke-width="1.6"/>
+<path d="M 60,182 C 40,178 25,165 20,148" fill="none" stroke="#00cc88" stroke-width="6" stroke-linecap="round" filter="url(#glow)"/>
+<path d="M 14,140 L 30,150 L 14,158 Z" fill="#0a1a14" stroke="#00cc88" stroke-width="1.8" filter="url(#glow)"/>
+<rect x="198" y="175" width="42" height="14" rx="4" fill="#0a1a14" stroke="#00cc88" stroke-width="1.6"/>
+<rect x="115" y="240" width="22" height="40" rx="5" fill="#0a1a14" stroke="#00cc88" stroke-width="1.6"/>
+<rect x="163" y="240" width="22" height="40" rx="5" fill="#0a1a14" stroke="#00cc88" stroke-width="1.6"/>
+<rect x="108" y="278" width="36" height="10" rx="3" fill="#081410" stroke="#00cc88" stroke-width="1.4"/>
+<rect x="156" y="278" width="36" height="10" rx="3" fill="#081410" stroke="#00cc88" stroke-width="1.4"/>
+<g stroke="#00cc88" stroke-width="0.8" opacity="0.3" fill="none">
+<line x1="115" y1="175" x2="185" y2="175"/><line x1="115" y1="195" x2="185" y2="195"/><line x1="115" y1="215" x2="185" y2="215"/>
+</g>
+
+<rect width="298" height="418" x="1" y="1" rx="13" fill="none" stroke="#00cc88" stroke-width="2.5" opacity="0.85" filter="url(#glow)"/>
+<rect width="290" height="410" x="5" y="5" rx="10" fill="none" stroke="#00cc88" stroke-width="0.6" opacity="0.25"/>
+<rect x="220" y="12" width="68" height="26" rx="7" fill="#00cc88" fill-opacity="0.18" stroke="#00cc88" stroke-width="1.2" filter="url(#glow)"/>
+<text x="254" y="29" fill="#00cc88" font-size="12" font-family="monospace" text-anchor="middle" font-weight="bold">M.11</text>
+<rect x="12" y="12" width="72" height="26" rx="7" fill="#00cc88" fill-opacity="0.12" stroke="#00cc88" stroke-width="1"/>
+<text x="48" y="29" fill="#00cc88" font-size="9" font-family="monospace" text-anchor="middle">🤖 ROBOT</text>
+<path d="M13,42 L13,14 L41,14" fill="none" stroke="#00cc88" stroke-width="1.8" opacity="0.55"/>
+<path d="M287,42 L287,14 L259,14" fill="none" stroke="#00cc88" stroke-width="1.8" opacity="0.55"/>
+<path d="M13,378 L13,406 L41,406" fill="none" stroke="#00cc88" stroke-width="1.8" opacity="0.55"/>
+<path d="M287,378 L287,406 L259,406" fill="none" stroke="#00cc88" stroke-width="1.8" opacity="0.55"/>
+<rect x="10" y="362" width="280" height="46" rx="9" fill="#00cc88" fill-opacity="0.13" stroke="#00cc88" stroke-width="1.2"/>
+<text x="150" y="378" fill="#00cc88" font-size="9" font-family="monospace" text-anchor="middle" opacity="0.75" letter-spacing="2">GEN. ROBÓTICA I</text>
+<text x="150" y="398" fill="white" font-size="16" font-family="monospace" text-anchor="middle" font-weight="bold" letter-spacing="1">EXCAVADOR MK-I</text>
+</g></svg>

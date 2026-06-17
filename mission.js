@@ -1,0 +1,413 @@
+/**
+ * DinoPC Explorer — mission.js v2
+ * Sistema de 3 misiones con STEPS encadenados, validación de requisitos
+ * y panel visual con clases done / next / todo.
+ */
+
+const Mission = {
+
+  // ─── Definición de misiones ───────────────────────
+
+  MISSIONS: [
+    {
+      id: 'spinosaurus', num: 1,
+      title: 'Expedición Spinosaurio', dino: 'spinosaurus',
+      folderName: 'Expedición Spinosaurio',
+      targetText: 'El Spinosaurio encontró peces gigantes en el río.',
+      fileName:   'informe_spino.doc',
+      maxSpace:   500,
+      steps: ['create-folder','open-dinoword','type-text','save-file','move-file'],
+      intro: '¡Bienvenido al laboratorio! 🦕 Tu primera misión: documenta al Spinosaurio, el mayor carnívoro que existió. Empieza creando una carpeta en "Mis Expediciones".'
+    },
+    {
+      id: 'trex', num: 2,
+      title: 'Expedición T-Rex', dino: 'trex',
+      folderName: 'Expedición TRex',
+      targetText: 'El Tiranosaurio Rex fue el depredador más temido del Cretácico tardío.',
+      fileName:   'informe_trex.doc',
+      maxSpace:   350,
+      steps: ['create-folder','open-dinoword','type-text','save-file','move-file'],
+      intro: '¡Increíble trabajo! 🦖 Ahora estudiaremos al legendario T-Rex. Crea una nueva carpeta y redacta su informe científico en DinoWord.'
+    },
+    {
+      id: 'triceratops', num: 3,
+      title: 'Expedición Triceratops', dino: 'triceratops',
+      folderName: 'Expedición Triceratops',
+      targetText: 'El Triceratops usaba sus tres cuernos para defenderse de los depredadores.',
+      fileName:   'informe_triceratops.doc',
+      maxSpace:   250,
+      steps: ['create-folder','open-dinoword','type-text','save-file','move-file'],
+      intro: '¡Genial! 🦏 Ahora el Triceratops. Era el herbívoro con armadura más famoso del Cretácico tardío. ¡Crea su expedición!'
+    },
+    {
+      id: 'velociraptor', num: 4,
+      title: 'Expedición Velociraptor', dino: 'velociraptor',
+      folderName: 'Expedición Velociraptor',
+      targetText: 'El Velociraptor cazaba en equipo y tenía plumas como un pájaro moderno.',
+      fileName:   'informe_veloci.doc',
+      maxSpace:   200,
+      steps: ['create-folder','open-dinoword','type-text','save-file','move-file'],
+      intro: '¡Cuarta misión! 🦎 El Velociraptor nos desafía. ¿Sabías que tenía plumas y era del tamaño de un pavo? ¡Solo tienes 200 KB de espacio!'
+    },
+    {
+      id: 'ankylosaurus', num: 5,
+      title: 'Expedición Ankylosaurus', dino: 'ankylosaurus',
+      folderName: 'Expedición Ankylosaurus',
+      targetText: 'El Ankylosaurus tenía una armadura ósea completa y una cola en forma de maza.',
+      fileName:   'informe_ankylo.doc',
+      maxSpace:   170,
+      steps: ['create-folder','open-dinoword','type-text','save-file','move-file'],
+      intro: '¡Quinta misión! 🐢 El Ankylosaurus, el tanque del Cretácico. Con 170 KB disponibles tendrás que ser muy eficiente. ¡A por ello!'
+    },
+    {
+      id: 'brachiosaurus', num: 6,
+      title: 'Expedición Braquiosaurio', dino: 'brachiosaurus',
+      folderName: 'Expedición Braquiosaurio',
+      targetText: 'El Braquiosaurio era uno de los dinosaurios más grandes que jamás caminaron por la Tierra.',
+      fileName:   'informe_brachio.doc',
+      maxSpace:   140,
+      steps: ['create-folder','open-dinoword','type-text','save-file','move-file'],
+      intro: '🏆 ¡Misión 6! 🦒 El Braquiosaurio, el gigante del Jurásico. Con solo 140 KB de espacio, ¡demuestra todo lo aprendido!'
+    },
+
+    // ── NIVEL AVANZADO ────────────────────────────────
+    {
+      id: 'pteranodon', num: 7,
+      title: 'Expedición Pteranodón', dino: 'pteranodon',
+      folderName: 'red_datos',
+      targetText: 'La comunicación es clave para trabajar en red.',
+      fileName:   'mensaje_red.txt',
+      maxSpace:   300,
+      feature:    'network',
+      steps: ['create-folder','open-dinoword','type-text','save-file','send-file'],
+      intro: '🌐 ¡Misión 7! El Pteranodón te enseña redes. Escribe el mensaje, guárdalo y ¡envíalo con DinoNetwork!'
+    },
+    {
+      id: 'stegosaurus', num: 8,
+      title: 'Expedición Estegosaurio', dino: 'stegosaurus',
+      folderName: 'seguridad',
+      targetText: 'La protección de datos es una responsabilidad.',
+      fileName:   'protocolo_defensa.txt',
+      maxSpace:   250,
+      feature:    'antivirus',
+      steps: ['create-folder','open-dinoword','type-text','save-file','scan-virus'],
+      intro: '🛡️ ¡Misión 8! El Estegosaurio protege tus archivos. Guarda el protocolo y escanea con AntiVirus Guardian.'
+    },
+    {
+      id: 'parasaurolophus', num: 9,
+      title: 'Expedición Parasaurolofus', dino: 'parasaurolophus',
+      folderName: 'compresion',
+      targetText: 'Comprimir datos ahorra espacio sin perder información.',
+      fileName:   'datos_optimizados.txt',
+      maxSpace:   400,
+      feature:    'compression',
+      steps: ['create-folder','open-dinoword','type-text','save-file','compress-files'],
+      intro: '📦 ¡Misión 9! El Parasaurolofus optimiza datos. Guarda el informe y comprime con DinoCompressor.'
+    },
+    {
+      id: 'iguanodon', num: 10,
+      title: 'Expedición Iguanodón', dino: 'iguanodon',
+      folderName: 'seguridad_avanzada',
+      targetText: 'La encriptación protege tus datos privados.',
+      fileName:   'archivo_secreto.txt',
+      maxSpace:   200,
+      feature:    'encryption',
+      steps: ['create-folder','open-dinoword','type-text','save-file','encrypt-file'],
+      intro: '🔐 ¡MISIÓN FINAL! Iguanodón, maestro de los secretos. Encripta tu archivo con DinoEncrypt y ¡conviértete en experto!'
+    },
+
+    // ── EXPANSIÓN: AI & Robotics Lab ────────────────
+    {
+      id: 'excavador_mk1', num: 11,
+      title: 'Lab Robots I', dino: 'excavador_mk1',
+      folderName: 'lab_robots',
+      targetText: 'Los robots siguen instrucciones paso a paso sin cometer errores.',
+      fileName:   'informe_robots.doc',
+      maxSpace:   400,
+      feature:    'robotlab',
+      steps: ['create-folder','open-dinoword','type-text','save-file','run-robot'],
+      intro: '🤖 ¡Expansión AI & Robotics! El ExcavadorMK-I te espera. Documenta qué aprendiste sobre robots y ¡programa tu primer robot!'
+    },
+    {
+      id: 'tricera_bot', num: 12,
+      title: 'Lab Debug', dino: 'tricera_bot',
+      folderName: 'lab_debug',
+      targetText: 'Un buen programador sabe encontrar y corregir errores en el código.',
+      fileName:   'informe_debug.doc',
+      maxSpace:   350,
+      feature:    'debugger',
+      steps: ['create-folder','open-dinoword','type-text','save-file','fix-debug'],
+      intro: '🐛 TriceraBot necesita tu ayuda. Los programas tienen bugs. ¡Aprende a detectarlos y corregirlos!'
+    },
+    {
+      id: 'raptor_scout', num: 13,
+      title: 'Lab Automatización', dino: 'raptor_scout',
+      folderName: 'lab_auto',
+      targetText: 'La automatización usa reglas SI-ENTONCES para tomar decisiones sin intervención humana.',
+      fileName:   'informe_auto.doc',
+      maxSpace:   350,
+      feature:    'automation',
+      steps: ['create-folder','open-dinoword','type-text','save-file','apply-rules'],
+      intro: '⚙️ Raptor Scout organiza a toda velocidad. Crea reglas SI/ENTONCES para clasificar fósiles automáticamente.'
+    },
+    {
+      id: 'ptero_drone', num: 14,
+      title: 'Prompt Hunter FINAL', dino: 'ptero_drone',
+      folderName: 'lab_prompts',
+      targetText: 'Las instrucciones precisas son el lenguaje que usan los humanos para comunicarse con las máquinas.',
+      fileName:   'informe_prompts.doc',
+      maxSpace:   300,
+      feature:    'prompthunter',
+      steps: ['create-folder','open-dinoword','type-text','save-file','complete-hunt'],
+      intro: '🎯 ¡MISIÓN FINAL DE LA EXPANSIÓN! PteroDrone vuela hacia el futuro. Demuestra que dominas el arte de las instrucciones precisas.'
+    }
+  ],
+
+  // ─── Pasos con cadena de requisitos ──────────────
+
+  STEPS: {
+    'create-folder': { label: '📁 Crear carpeta',      requires: null,            action: 'folder-created'   },
+    'open-dinoword': { label: '📝 Abrir DinoWord',      requires: 'create-folder', action: 'window-opened'    },
+    'type-text':     { label: '⌨️ Escribir texto',      requires: 'open-dinoword', action: 'text-typed'       },
+    'save-file':     { label: '💾 Guardar archivo',     requires: 'type-text',     action: 'file-saved'       },
+    'move-file':     { label: '🚚 Mover archivo',       requires: 'save-file',     action: 'file-moved'       },
+    // ── Pasos avanzados (misiones 7-10) ──
+    'send-file':      { label: '🌐 Enviar por red',     requires: 'save-file',     action: 'file-sent'        },
+    'scan-virus':     { label: '🛡️ Escanear virus',     requires: 'save-file',     action: 'virus-scanned'    },
+    'compress-files': { label: '📦 Comprimir archivos', requires: 'save-file',     action: 'files-compressed' },
+    'encrypt-file':   { label: '🔐 Encriptar archivo',  requires: 'save-file',     action: 'file-encrypted'   },
+    // ── Pasos AI & Robotics Lab (misiones 11-14) ──
+    'run-robot':      { label: '🤖 Programar robot',    requires: 'save-file',     action: 'run-robot'        },
+    'fix-debug':      { label: '🐛 Depurar programa',   requires: 'save-file',     action: 'fix-debug'        },
+    'apply-rules':    { label: '⚙️ Aplicar reglas',     requires: 'save-file',     action: 'apply-rules'      },
+    'complete-hunt':  { label: '🎯 Prompt Hunter',      requires: 'save-file',     action: 'complete-hunt'    }
+  },
+
+  _completedSteps: [],
+  panelHidden:     false,
+  hadNoOverflow:   true,   // se pone false si ocurre storage-exceeded
+
+  // ─── Getters ──────────────────────────────────────
+
+  get currentIdx() {
+    const unlocked = App.state.unlockedDinos;
+    const idx = this.MISSIONS.findIndex(m => !unlocked.includes(m.dino));
+    return idx === -1 ? this.MISSIONS.length - 1 : idx;
+  },
+
+  get current() { return this.MISSIONS[this.currentIdx]; },
+
+  get allComplete() {
+    return this.MISSIONS.every(m => App.state.unlockedDinos.includes(m.dino));
+  },
+
+  // ─── API pública ──────────────────────────────────
+
+  /** Primer paso aún no completado, o null si todos hechos */
+  getNextStep() {
+    const steps = this.current.steps || Object.keys(this.STEPS).slice(0, 5);
+    return steps.find(id => !this._completedSteps.includes(id)) || null;
+  },
+
+  /**
+   * Comprueba si un paso puede ejecutarse ahora.
+   * @returns {{ allowed: boolean, reason?: string }}
+   */
+  canDoStep(stepId) {
+    const step = this.STEPS[stepId];
+    if (!step)
+      return { allowed: false, reason: 'Paso desconocido: ' + stepId };
+    if (this._completedSteps.includes(stepId))
+      return { allowed: false, reason: 'Este paso ya está completado.' };
+    if (step.requires && !this._completedSteps.includes(step.requires)) {
+      const reqLabel = (this.STEPS[step.requires] || {}).label || step.requires;
+      return { allowed: false, reason: 'Primero debes completar: ' + reqLabel };
+    }
+    return { allowed: true };
+  },
+
+  // ─── Inicialización ───────────────────────────────
+
+  init() {
+    this._completedSteps = [];
+    this.hadNoOverflow   = true;
+    // Aplicar límite de espacio de esta misión
+    App.state.fileSystem.usedSpace = 0;
+    App.state.fileSystem.maxSpace  = this.current.maxSpace || 1000;
+    this._renderPanel();
+    setTimeout(() => Desktop.showGuide(
+      this.allComplete
+        ? '🏆 ¡Has completado las 3 expediciones! Eres un paleontólogo experto.'
+        : this.current.intro
+    ), 400);
+  },
+
+  // ─── Detector de acciones ─────────────────────────
+
+  /**
+   * Punto de entrada para todos los módulos.
+   * Mapea la acción → stepId → valida → completa.
+   * @returns {{ success: boolean, reason?: string }}
+   */
+  onAction(action, data) {
+    data = data || {};
+    if (this.allComplete) return { success: false };
+
+    // Acción especial: exceso de almacenamiento (no completa pasos)
+    if (action === 'storage-exceeded') {
+      this.hadNoOverflow = false;
+      DinoLog.track('storage-overflow');
+      return { success: false };
+    }
+
+    const stepId = this._resolveStep(action, data);
+    if (!stepId) return { success: false };
+
+    const check = this.canDoStep(stepId);
+    if (!check.allowed) {
+      console.warn('Mission.onAction bloqueado [' + stepId + ']:', check.reason);
+      return { success: false, reason: check.reason };
+    }
+
+    this._complete(stepId);
+    return { success: true };
+  },
+
+  // ─── Internos ─────────────────────────────────────
+
+  /**
+   * Mapea string de acción → stepId usando STEPS[].action.
+   * Aplica validación especial para 'file-saved' (comprueba nombre).
+   */
+  _resolveStep(action, data) {
+    for (const [id, step] of Object.entries(this.STEPS)) {
+      if (step.action !== action) continue;
+
+      if (id === 'save-file') {
+        const expected = this.current.fileName;
+        const given    = (data.filename || '').toLowerCase().trim();
+        if (given !== expected) {
+          Desktop.showGuide('⚠️ Guarda el archivo como "' + expected +
+            '". Lo guardaste como "' + (data.filename || 'sin nombre') + '".');
+          return null;
+        }
+      }
+
+      return id;
+    }
+    return null;
+  },
+
+  _complete(stepId) {
+    if (this._completedSteps.includes(stepId)) return;
+    this._completedSteps.push(stepId);
+    this._renderPanel();
+    this._animateStep(stepId);
+    DinoLog.track('step');
+    AudioEngine.play('success');
+
+    if (this._completedSteps.length === (this.current.steps || Object.keys(this.STEPS).slice(0,5)).length) {
+      setTimeout(() => Mission._onMissionComplete(), 800);
+    }
+  },
+
+  _onMissionComplete() {
+    const m = this.current;
+    DinoLog.track('mission');
+    AudioEngine.play('mission-complete');
+    Achievements.check('mission-complete', DinoLog.data.missions);
+
+    // Logro: misión sin exceder espacio
+    if (this.hadNoOverflow) {
+      DinoLog.track('mission-no-overflow');
+      Achievements.check('mission-complete-no-overflow', 1);
+    }
+
+    // Notificación por email al padre/tutor (abre cliente de correo)
+    const user = (typeof Auth !== 'undefined') ? Auth.getUser() : null;
+    if (user && user.email) {
+      EmailService.sendMissionComplete(user, m.title, m.title.split(' ').pop());
+    }
+    Desktop.showGuide(
+      '🏆 ¡Expedición "' + m.title + '" completada! ' +
+      'Demuestra tus conocimientos en el DinoQuiz para desbloquear la ficha.',
+      10000
+    );
+    Quiz.forDino = m.dino;
+    setTimeout(() => Desktop.openWindow('quiz'), 2600);
+  },
+
+  // ─── Panel visual ─────────────────────────────────
+
+  _renderPanel() {
+    const container = document.getElementById('mp-steps');
+    const header    = document.querySelector('.mp-header span');
+    if (!container) return;
+
+    const m   = this.current;
+    const all = this.allComplete;
+
+    if (header) {
+      header.textContent = all
+        ? '🏆 ¡TODAS COMPLETADAS!'
+        : '🦕 MISIÓN ' + m.num + '/' + this.MISSIONS.length + ' · ' + m.title.toUpperCase();
+    }
+
+    if (all) {
+      container.innerHTML =
+        '<div class="mp-all-done">' +
+          '<div>¡Eres un paleontólogo experto!</div>' +
+          '<div class="mp-dinos">🦕 🦖 🦏</div>' +
+        '</div>';
+      return;
+    }
+
+    const nextStep = this.getNextStep();
+
+    const missionSteps = this.current.steps || Object.keys(this.STEPS).slice(0, 5);
+    const stepsHTML = '<div class="steps-list">' +
+      missionSteps.map(id => {
+        const step   = this.STEPS[id];
+        if (!step) return '';
+        const done   = this._completedSteps.includes(id);
+        const isNext = id === nextStep;
+        const cls    = done ? 'step step-done'
+                     : isNext ? 'step step-next'
+                     : 'step step-todo';
+        const icon   = done ? '✓' : isNext ? '⬜' : '•';
+        return '<div class="' + cls + '" data-step="' + id + '">' +
+               icon + ' ' + step.label + '</div>';
+      }).join('') +
+    '</div>';
+
+    // Indicador de progreso de misiones
+    const dots = this.MISSIONS.map((mission, i) => {
+      const isDone    = App.state.unlockedDinos.includes(mission.dino);
+      const isCurrent = i === this.currentIdx;
+      const cls       = isDone ? 'done' : isCurrent ? 'active' : '';
+      return '<span class="mp-mdot ' + cls + '" title="' + mission.title + '"></span>';
+    }).join('');
+
+    container.innerHTML = stepsHTML +
+      '<div class="mp-mbar">' + dots +
+      '<span class="mp-mlabel">misión ' + (this.currentIdx + 1) +
+      ' de ' + this.MISSIONS.length + '</span></div>';
+  },
+
+  /** Destellar brevemente el paso recién completado */
+  _animateStep(stepId) {
+    const el = document.querySelector('[data-step="' + stepId + '"]');
+    if (!el) return;
+    el.style.transition = 'none';
+    el.style.background = 'rgba(0,255,136,0.25)';
+    setTimeout(() => { el.style.transition = 'background 1.2s'; el.style.background = ''; }, 50);
+  },
+
+  togglePanel() {
+    const steps = document.getElementById('mp-steps');
+    const btn   = document.querySelector('.mp-toggle');
+    this.panelHidden = !this.panelHidden;
+    steps.style.display = this.panelHidden ? 'none' : '';
+    if (btn) btn.classList.toggle('up', !this.panelHidden);
+  }
+};

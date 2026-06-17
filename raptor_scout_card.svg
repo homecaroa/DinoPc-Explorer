@@ -1,0 +1,52 @@
+<svg width="300" height="420" viewBox="0 0 300 420" xmlns="http://www.w3.org/2000/svg">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="0.3" y2="1">
+    <stop offset="0%" stop-color="#040810"/><stop offset="60%" stop-color="#06100c" stop-opacity="0.95"/>
+    <stop offset="100%" stop-color="#030709"/>
+  </linearGradient>
+  <radialGradient id="orb" cx="50%" cy="48%" r="45%">
+    <stop offset="0%" stop-color="#ff8800" stop-opacity="0.18"/><stop offset="100%" stop-color="#ff8800" stop-opacity="0"/>
+  </radialGradient>
+  <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+    <feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+  </filter>
+  <clipPath id="cp"><rect width="300" height="420" rx="14"/></clipPath>
+</defs>
+<g clip-path="url(#cp)">
+<rect width="300" height="420" fill="url(#bg)"/>
+<g opacity="0.05" stroke="#ff8800" stroke-width="0.6" fill="none">
+  <line x1="0" y1="0" x2="300" y2="0"/><line x1="0" y1="52" x2="300" y2="52"/><line x1="0" y1="104" x2="300" y2="104"/><line x1="0" y1="156" x2="300" y2="156"/><line x1="0" y1="208" x2="300" y2="208"/><line x1="0" y1="260" x2="300" y2="260"/><line x1="0" y1="312" x2="300" y2="312"/><line x1="0" y1="364" x2="300" y2="364"/><line x1="0" y1="416" x2="300" y2="416"/>
+  <line x1="0" y1="0" x2="0" y2="420"/><line x1="52" y1="0" x2="52" y2="420"/><line x1="104" y1="0" x2="104" y2="420"/><line x1="156" y1="0" x2="156" y2="420"/><line x1="208" y1="0" x2="208" y2="420"/><line x1="260" y1="0" x2="260" y2="420"/>
+</g>
+<ellipse cx="150" cy="190" rx="130" ry="110" fill="url(#orb)"/>
+
+<ellipse cx="150" cy="200" rx="48" ry="62" fill="#2a1400" stroke="#ff8800" stroke-width="2" filter="url(#glow)"/>
+<ellipse cx="150" cy="150" rx="26" ry="22" fill="#1e0e00" stroke="#ff8800" stroke-width="1.8" filter="url(#glow)"/>
+<polygon points="170,140 195,132 188,150" fill="#1e0e00" stroke="#ff8800" stroke-width="1.6" filter="url(#glow)"/>
+<circle cx="142" cy="146" r="6" fill="#0a0500"/><circle cx="142" cy="146" r="3.5" fill="#ff8800" opacity="0.9" filter="url(#glow)"/>
+<circle cx="160" cy="146" r="6" fill="#0a0500"/><circle cx="160" cy="146" r="3.5" fill="#ff8800" opacity="0.9" filter="url(#glow)"/>
+<path d="M 110,180 C 90,185 78,200 80,220" fill="none" stroke="#ff8800" stroke-width="6" stroke-linecap="round" filter="url(#glow)"/>
+<path d="M 190,180 C 210,185 222,200 220,220" fill="none" stroke="#ff8800" stroke-width="6" stroke-linecap="round" filter="url(#glow)"/>
+<rect x="128" y="252" width="18" height="38" rx="5" fill="#1e0e00" stroke="#ff8800" stroke-width="1.6"/>
+<rect x="154" y="252" width="18" height="38" rx="5" fill="#1e0e00" stroke="#ff8800" stroke-width="1.6"/>
+<polygon points="120,288 110,300 130,300" fill="#160a00" stroke="#ff8800" stroke-width="1.4" filter="url(#glow)"/>
+<polygon points="180,288 170,300 190,300" fill="#160a00" stroke="#ff8800" stroke-width="1.4" filter="url(#glow)"/>
+<path d="M 130,250 C 110,255 95,270 100,290" fill="none" stroke="#ff8800" stroke-width="4" opacity="0.6" filter="url(#glow)"/>
+<g stroke="#ff8800" stroke-width="0.7" opacity="0.35" fill="none">
+<path d="M 110,190 C 130,185 170,185 190,190"/><path d="M 108,210 C 130,205 170,205 192,210"/>
+</g>
+
+<rect width="298" height="418" x="1" y="1" rx="13" fill="none" stroke="#ff8800" stroke-width="2.5" opacity="0.85" filter="url(#glow)"/>
+<rect width="290" height="410" x="5" y="5" rx="10" fill="none" stroke="#ff8800" stroke-width="0.6" opacity="0.25"/>
+<rect x="220" y="12" width="68" height="26" rx="7" fill="#ff8800" fill-opacity="0.18" stroke="#ff8800" stroke-width="1.2" filter="url(#glow)"/>
+<text x="254" y="29" fill="#ff8800" font-size="12" font-family="monospace" text-anchor="middle" font-weight="bold">M.13</text>
+<rect x="12" y="12" width="72" height="26" rx="7" fill="#ff8800" fill-opacity="0.12" stroke="#ff8800" stroke-width="1"/>
+<text x="48" y="29" fill="#ff8800" font-size="9" font-family="monospace" text-anchor="middle">🤖 ROBOT</text>
+<path d="M13,42 L13,14 L41,14" fill="none" stroke="#ff8800" stroke-width="1.8" opacity="0.55"/>
+<path d="M287,42 L287,14 L259,14" fill="none" stroke="#ff8800" stroke-width="1.8" opacity="0.55"/>
+<path d="M13,378 L13,406 L41,406" fill="none" stroke="#ff8800" stroke-width="1.8" opacity="0.55"/>
+<path d="M287,378 L287,406 L259,406" fill="none" stroke="#ff8800" stroke-width="1.8" opacity="0.55"/>
+<rect x="10" y="362" width="280" height="46" rx="9" fill="#ff8800" fill-opacity="0.13" stroke="#ff8800" stroke-width="1.2"/>
+<text x="150" y="378" fill="#ff8800" font-size="9" font-family="monospace" text-anchor="middle" opacity="0.75" letter-spacing="2">GEN. ROBÓTICA III</text>
+<text x="150" y="398" fill="white" font-size="16" font-family="monospace" text-anchor="middle" font-weight="bold" letter-spacing="1">RAPTOR SCOUT</text>
+</g></svg>

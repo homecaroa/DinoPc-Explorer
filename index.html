@@ -7,6 +7,42 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦕</text></svg>">
 </head>
+<style>
+/* ── SIDEBAR INLINE (evita dependencia de style.css) ── */
+#app-sidebar{position:fixed;left:0;top:0;bottom:44px;width:80px;background:rgba(6,10,22,0.96);border-right:1px solid #1a3050;backdrop-filter:blur(16px);display:flex;flex-direction:column;z-index:200;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;padding:6px 0 10px;}
+.sidebar-section{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0 10px;border-bottom:1px solid rgba(255,255,255,0.06);}
+.sidebar-section:last-child{border-bottom:none;}
+.sidebar-section--bottom{margin-top:auto;border-top:1px solid rgba(255,255,255,0.08);border-bottom:none;padding-top:10px;}
+.sidebar-label{font-size:8px;letter-spacing:1.5px;color:#8899aa;text-align:center;padding:2px 4px 6px;width:100%;opacity:.65;font-weight:700;}
+.sidebar-icon{display:flex;flex-direction:column;align-items:center;gap:4px;width:68px;padding:7px 4px;border-radius:10px;cursor:pointer;transition:background .15s,transform .12s;position:relative;background:transparent;border:none;color:#ccd6e0;min-height:60px;justify-content:center;}
+.sidebar-icon:hover{background:rgba(0,255,136,.10);transform:translateX(3px);}
+.sidebar-icon:active{transform:scale(.93);background:rgba(0,255,136,.18);}
+.sidebar-icon:focus-visible{outline:2px solid #00ff88;outline-offset:2px;}
+.sidebar-icon--ai:hover{background:rgba(68,136,255,.14);}
+.sidebar-icon--danger:hover{background:rgba(255,34,68,.12);}
+.si-ico{font-size:26px;line-height:1;display:block;filter:drop-shadow(0 1px 3px rgba(0,0,0,.5));}
+.sidebar-icon:hover .si-ico{filter:drop-shadow(0 0 8px rgba(0,255,136,.6));}
+.sidebar-icon--ai:hover .si-ico{filter:drop-shadow(0 0 8px rgba(68,136,255,.7));}
+.sidebar-icon--danger:hover .si-ico{filter:drop-shadow(0 0 8px rgba(255,34,68,.7));}
+.si-label{font-size:9px;font-weight:600;text-align:center;color:#8899aa;line-height:1.2;white-space:nowrap;overflow:hidden;max-width:66px;text-overflow:ellipsis;}
+.sidebar-icon:hover .si-label{color:#00ff88;}
+.sidebar-icon--ai:hover .si-label{color:#88bbff;}
+.sidebar-icon--danger:hover .si-label{color:#ff2244;}
+.sidebar-icon::after{content:attr(aria-label);position:absolute;left:calc(100% + 10px);top:50%;transform:translateY(-50%);background:rgba(0,0,0,.92);color:#fff;font-size:12px;padding:5px 10px;border-radius:6px;white-space:normal;pointer-events:none;opacity:0;transition:opacity .15s;z-index:9999;border:1px solid #1a3050;max-width:200px;line-height:1.4;}
+.sidebar-icon:hover::after{opacity:1;}
+/* Ajustes de layout */
+#windows-container{position:absolute;inset:0 0 44px 80px;pointer-events:none;}
+.window{pointer-events:all;}
+.desktop-wallpaper{position:absolute;inset:0 0 0 80px;overflow:hidden;}
+#taskbar{position:fixed;bottom:0;left:80px;right:0;height:44px;}
+.spino-guide{position:fixed;bottom:56px;left:90px;}
+/* Ocultar elementos viejos */
+#desktop-area,#start-menu,.tb-start{display:none!important;}
+/* Responsive */
+@media(max-width:700px){#app-sidebar{width:56px;}.sidebar-icon{width:48px;}#windows-container{inset:0 0 44px 56px;}.desktop-wallpaper{inset:0 0 0 56px;}#taskbar{left:56px;}}
+@media(max-width:480px){#app-sidebar{width:46px;}.si-label{display:none;}#windows-container{inset:0 0 44px 46px;}.desktop-wallpaper{inset:0 0 0 46px;}#taskbar{left:46px;}}
+@media(prefers-reduced-motion:reduce){.sidebar-icon,.storage-used,.progress-bar-fill{transition:none;}}
+</style>
 <body>
 
   <!-- ═══════════════════════════════════════════

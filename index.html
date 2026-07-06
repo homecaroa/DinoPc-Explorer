@@ -147,104 +147,157 @@
       <div class="wall-dino-bg"></div>
     </div>
 
-    <!-- Iconos del escritorio -->
-    <div id="desktop-area">
-      <div class="desktop-icon" id="dsk-file-explorer" onclick="Desktop.clickIcon('file-explorer', this)">
-        <div class="dsk-icon fe-ico"></div>
-        <span>Mis Expediciones</span>
+    <!-- ═══ SIDEBAR DE APLICACIONES ═══ -->
+    <aside id="app-sidebar" role="navigation" aria-label="Aplicaciones del escritorio">
+
+      <!-- Sección: Básico -->
+      <div class="sidebar-section">
+        <div class="sidebar-label">BÁSICO</div>
+
+        <button class="sidebar-icon" onclick="Desktop.openWindow('file-explorer')"
+                aria-label="Mis Expediciones — explorador de archivos">
+          <span class="si-ico" aria-hidden="true">📁</span>
+          <span class="si-label">Expediciones</span>
+        </button>
+
+        <button class="sidebar-icon" onclick="Desktop.openWindow('dinoword')"
+                aria-label="DinoWord — procesador de texto">
+          <span class="si-ico" aria-hidden="true">📝</span>
+          <span class="si-label">DinoWord</span>
+        </button>
+
+        <button class="sidebar-icon" onclick="Desktop.openWindow('quiz')"
+                aria-label="DinoQuiz — preguntas y retos">
+          <span class="si-ico" aria-hidden="true">🧠</span>
+          <span class="si-label">DinoQuiz</span>
+        </button>
+
+        <button class="sidebar-icon" onclick="Desktop.openWindow('minigame')"
+                aria-label="Rescate del Río — minijuego">
+          <span class="si-ico" aria-hidden="true">🎮</span>
+          <span class="si-label">Rescate Río</span>
+        </button>
       </div>
-      <div class="desktop-icon" id="dsk-dinoword" onclick="Desktop.clickIcon('dinoword', this)">
-        <div class="dsk-icon dw-ico"></div>
-        <span>DinoWord</span>
+
+      <!-- Sección: Herramientas -->
+      <div class="sidebar-section">
+        <div class="sidebar-label">HERRAMIENTAS</div>
+
+        <button class="sidebar-icon" onclick="Desktop.openWindow('network')"
+                aria-label="DinoNetwork — envío de archivos por red">
+          <span class="si-ico" aria-hidden="true">🌐</span>
+          <span class="si-label">Red</span>
+        </button>
+
+        <button class="sidebar-icon" onclick="Desktop.openWindow('antivirus')"
+                aria-label="AntiVirus Guardian — protección de archivos">
+          <span class="si-ico" aria-hidden="true">🛡️</span>
+          <span class="si-label">AntiVirus</span>
+        </button>
+
+        <button class="sidebar-icon" onclick="Desktop.openWindow('compressor')"
+                aria-label="DinoCompressor — compresión de archivos">
+          <span class="si-ico" aria-hidden="true">📦</span>
+          <span class="si-label">Comprimir</span>
+        </button>
+
+        <button class="sidebar-icon" onclick="Desktop.openWindow('encryption')"
+                aria-label="DinoEncrypt — encriptación de archivos">
+          <span class="si-ico" aria-hidden="true">🔐</span>
+          <span class="si-label">Encriptar</span>
+        </button>
       </div>
-      <div class="desktop-icon" id="dsk-minigame" onclick="Desktop.clickIcon('minigame', this)">
-        <div class="dsk-icon mg-ico"></div>
-        <span>Rescate del Río</span>
+
+      <!-- Sección: AI Lab -->
+      <div class="sidebar-section">
+        <div class="sidebar-label">AI LAB 🤖</div>
+
+        <button class="sidebar-icon sidebar-icon--ai" onclick="Desktop.openWindow('robotlab')"
+                aria-label="Lab de Robots — programa tu propio robot">
+          <span class="si-ico" aria-hidden="true">🤖</span>
+          <span class="si-label">Robots</span>
+        </button>
+
+        <button class="sidebar-icon sidebar-icon--ai" onclick="Desktop.openWindow('debugger')"
+                aria-label="Debugging Lab — encuentra errores en programas">
+          <span class="si-ico" aria-hidden="true">🐛</span>
+          <span class="si-label">Debugger</span>
+        </button>
+
+        <button class="sidebar-icon sidebar-icon--ai" onclick="Desktop.openWindow('automation')"
+                aria-label="Automation Lab — crea reglas automáticas">
+          <span class="si-ico" aria-hidden="true">⚙️</span>
+          <span class="si-label">Auto Lab</span>
+        </button>
+
+        <button class="sidebar-icon sidebar-icon--ai" onclick="Desktop.openWindow('prompthunter')"
+                aria-label="Prompt Hunter — elige instrucciones precisas">
+          <span class="si-ico" aria-hidden="true">🎯</span>
+          <span class="si-label">Prompts</span>
+        </button>
       </div>
-      <div class="desktop-icon" id="dsk-quiz" onclick="Desktop.clickIcon('quiz', this)">
-        <div class="dsk-icon qz-ico"></div>
-        <span>DinoQuiz</span>
+
+      <!-- Sección: Sistema -->
+      <div class="sidebar-section sidebar-section--bottom">
+        <button class="sidebar-icon" onclick="App.showCollection()"
+                aria-label="Colección de dinosaurios desbloqueados">
+          <span class="si-ico" aria-hidden="true">🏆</span>
+          <span class="si-label">Colección</span>
+        </button>
+
+        <button class="sidebar-icon" onclick="Desktop.openWindow('dinoLog')"
+                aria-label="Diario DinoPC — estadísticas">
+          <span class="si-ico" aria-hidden="true">📊</span>
+          <span class="si-label">Diario</span>
+        </button>
+
+        <button class="sidebar-icon" onclick="Desktop.openWindow('settings')"
+                aria-label="Configuración del laboratorio">
+          <span class="si-ico" aria-hidden="true">⚙️</span>
+          <span class="si-label">Config</span>
+        </button>
+
+        <button class="sidebar-icon sidebar-icon--danger" onclick="App.showSplash()"
+                aria-label="Salir al menú principal">
+          <span class="si-ico" aria-hidden="true">⏻</span>
+          <span class="si-label">Salir</span>
+        </button>
       </div>
-      <div class="desktop-icon" id="dsk-trash" onclick="Desktop.clickIcon('trash', this)">
-        <div class="dsk-icon tr-ico"></div>
-        <span>Papelera</span>
-      </div>
-      <div class="desktop-icon" id="dsk-settings" onclick="Desktop.clickIcon('settings', this)">
-        <div class="dsk-icon settings-ico"></div>
-        <span>Configuración</span>
-      </div>
-      <div class="desktop-icon" id="dsk-dinoLog" onclick="Desktop.clickIcon('dinoLog', this)">
-        <div class="dsk-icon log-ico"></div>
-        <span>Diario DinoPC</span>
-      </div>
-    </div>
+    </aside>
 
     <!-- Guía Spinosaurio -->
-    <div id="spino-guide" class="spino-guide hidden">
+    <div id="spino-guide" class="spino-guide hidden" role="status" aria-live="polite">
       <div class="guide-avatar">
         <img src="assets/images/spinosaurus_talking.png"
              class="guide-img" alt="Rex el guía">
       </div>
       <div class="guide-bubble">
         <span id="guide-text">¡Hola!</span>
-        <button class="guide-close" onclick="Desktop.closeGuide()">✕</button>
+        <button class="guide-close" onclick="Desktop.closeGuide()" aria-label="Cerrar mensaje">✕</button>
       </div>
     </div>
 
     <!-- Contenedor de ventanas -->
-    <div id="windows-container"></div>
+    <div id="windows-container" role="main"></div>
 
     <!-- Panel de misión -->
-    <div id="mission-panel">
+    <div id="mission-panel" role="complementary" aria-label="Panel de misión actual">
       <div class="mp-header">
         <span>🦕 MISIÓN: Expedición Spinosaurio</span>
-        <button class="mp-toggle" onclick="Mission.togglePanel()">▼</button>
+        <button class="mp-toggle" onclick="Mission.togglePanel()" aria-label="Expandir o colapsar panel de misión">▼</button>
       </div>
       <div id="mp-steps" class="mp-steps"></div>
     </div>
 
-    <!-- Menú Inicio -->
-    <div id="start-menu" class="hidden">
-      <div class="sm-header">
-        <div class="sm-avatar">🦕</div>
-        <div class="sm-info"><b>Explorador</b><small>DinoPC OS v1.0</small></div>
-      </div>
-      <nav class="sm-nav">
-        <div class="sm-item" onclick="Desktop.openWindow('file-explorer'); Desktop.closeStart()">📁 Mis Expediciones</div>
-        <div class="sm-item" onclick="Desktop.openWindow('dinoword'); Desktop.closeStart()">📝 DinoWord</div>
-        <div class="sm-item" onclick="Desktop.openWindow('minigame'); Desktop.closeStart()">🎮 Rescate del Río</div>
-        <div class="sm-item" onclick="Desktop.openWindow('quiz'); Desktop.closeStart()">🧠 DinoQuiz</div>
-        <div class="sm-sep"></div>
-        <div class="sm-item" onclick="Desktop.openWindow('network'); Desktop.closeStart()">🌐 DinoNetwork</div>
-        <div class="sm-item" onclick="Desktop.openWindow('antivirus'); Desktop.closeStart()">🛡️ AntiVirus Guardian</div>
-        <div class="sm-item" onclick="Desktop.openWindow('compressor'); Desktop.closeStart()">📦 DinoCompressor</div>
-        <div class="sm-item" onclick="Desktop.openWindow('encryption'); Desktop.closeStart()">🔐 DinoEncrypt</div>
-        <div class="sm-sep"></div>
-        <div class="sm-item" onclick="Desktop.openWindow('robotlab'); Desktop.closeStart()">🤖 Lab de Robots</div>
-        <div class="sm-item" onclick="Desktop.openWindow('debugger'); Desktop.closeStart()">🐛 Debugging Lab</div>
-        <div class="sm-item" onclick="Desktop.openWindow('automation'); Desktop.closeStart()">⚙️ Automation Lab</div>
-        <div class="sm-item" onclick="Desktop.openWindow('prompthunter'); Desktop.closeStart()">🎯 Prompt Hunter</div>
-        <div class="sm-sep"></div>
-        <div class="sm-item" onclick="Desktop.openWindow('settings'); Desktop.closeStart()">⚙️ Configuración</div>
-        <div class="sm-item" onclick="Desktop.openWindow('dinoLog'); Desktop.closeStart()">📊 Diario DinoPC</div>
-        <div class="sm-sep"></div>
-        <div class="sm-item" onclick="App.showCollection()">🏆 Colección</div>
-        <div class="sm-item danger" onclick="App.showSplash()">⏻ Salir al menú</div>
-      </nav>
-    </div>
-
     <!-- Barra de tareas -->
-    <div id="taskbar">
-      <button class="tb-start" onclick="Desktop.toggleStart()">
-        <span>🦕</span> DinoPC
-      </button>
+    <div id="taskbar" role="toolbar" aria-label="Barra de tareas">
       <div id="tb-items"></div>
       <div class="tb-tray">
-        <button id="tb-sound" class="tb-sound" title="Activar / Silenciar"
+        <button id="tb-sound" class="tb-sound" title="Activar / Silenciar" aria-label="Activar o silenciar sonido"
                 onclick="const on=AudioEngine.toggle(); this.textContent=on?'🔊':'🔇'; const c=document.getElementById('sound-check'); if(c) c.checked=on;">
           🔊
         </button>
-        <span class="tb-clock" id="tb-clock">00:00</span>
+        <span class="tb-clock" id="tb-clock" aria-live="off">00:00</span>
       </div>
     </div>
   </div>
